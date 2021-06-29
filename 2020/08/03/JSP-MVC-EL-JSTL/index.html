@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="JSP:一、指令1. 作用        用于配置JSP页面，导入资源文件 2. 格式：        &lt;%@ 指令名称 属性名1&#x3D;属性值1 属性名2&#x3D;属性值2 ... %&gt; 3. 分类：page        ： 配置JSP页面的            * contentType：等同于response.setContentType()                 1. 设置响应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JSP_MVC_EL_JSTL">
+<meta property="og:url" content="http://yoursite.com/2020/08/03/JSP-MVC-EL-JSTL/index.html">
+<meta property="og:site_name" content="zenner&#39;s Blog">
+<meta property="og:description" content="JSP:一、指令1. 作用        用于配置JSP页面，导入资源文件 2. 格式：        &lt;%@ 指令名称 属性名1&#x3D;属性值1 属性名2&#x3D;属性值2 ... %&gt; 3. 分类：page        ： 配置JSP页面的            * contentType：等同于response.setContentType()                 1. 设置响应">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="http://yoursite.com/2020/08/03/JSP-MVC-EL-JSTL/MVC%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.bmp">
+<meta property="og:image" content="http://yoursite.com/2020/08/03/JSP-MVC-EL-JSTL/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84.bmp">
+<meta property="og:image" content="http://yoursite.com/2020/08/03/JSP-MVC-EL-JSTL/%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90.bmp">
+<meta property="article:published_time" content="2020-08-03T01:11:00.000Z">
+<meta property="article:modified_time" content="2020-08-03T07:19:18.674Z">
+<meta property="article:tag" content="dive into">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/08/03/JSP-MVC-EL-JSTL/MVC%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.bmp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/08/03/JSP-MVC-EL-JSTL/"/>
+
+
+
+
+
+  <title>JSP_MVC_EL_JSTL | zenner's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zenner's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">巨饼的技术博</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/03/JSP-MVC-EL-JSTL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zenner's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JSP_MVC_EL_JSTL</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-03T09:11:00+08:00">
+                2020-08-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="JSP"><a href="#JSP" class="headerlink" title="JSP:"></a>JSP:</h1><h2 id="一、指令"><a href="#一、指令" class="headerlink" title="一、指令"></a>一、指令</h2><h3 id="1-作用"><a href="#1-作用" class="headerlink" title="1. 作用"></a>1. 作用</h3><pre><code>        用于配置JSP页面，导入资源文件
+</code></pre><h3 id="2-格式："><a href="#2-格式：" class="headerlink" title="2. 格式："></a>2. 格式：</h3><pre><code>        &lt;%@ 指令名称 属性名1=属性值1 属性名2=属性值2 ... %&gt;
+</code></pre><h3 id="3-分类："><a href="#3-分类：" class="headerlink" title="3. 分类："></a>3. 分类：</h3><h4 id="page-：-配置JSP页面的"><a href="#page-：-配置JSP页面的" class="headerlink" title="page        ： 配置JSP页面的"></a>page        ： 配置JSP页面的</h4><pre><code>            * contentType：等同于response.setContentType()
+                1. 设置响应体的mime类型以及字符集
+                2. 设置当前jsp页面的编码（只能是高级的IDE才能生效，如果使用低级工具，则需要设置pageEncoding属性设置当前页面的字符集）
+            * import：导包
+            * errorPage：当前页面发生异常后，会自动跳转到指定的错误页面
+            * isErrorPage：标识当前也是是否是错误页面。
+                * true：是，可以使用内置对象exception
+                * false：否。默认值。不可以使用内置对象exception
+</code></pre><a id="more"></a>
+<h4 id="include-：-页面包含的。导入页面的资源文件"><a href="#include-：-页面包含的。导入页面的资源文件" class="headerlink" title="include    ： 页面包含的。导入页面的资源文件"></a>include    ： 页面包含的。导入页面的资源文件</h4><pre><code>            * &lt;%@include file=&quot;top.jsp&quot;%&gt;
+</code></pre><h4 id="taglib-：-导入资源"><a href="#taglib-：-导入资源" class="headerlink" title="taglib    ： 导入资源"></a>taglib    ： 导入资源</h4><pre><code>            * &lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;
+                * prefix：前缀，自定义的
+</code></pre><h2 id="二、注释"><a href="#二、注释" class="headerlink" title="二、注释:"></a>二、注释:</h2><pre><code>    1. html注释：
+        &lt;!-- --&gt;:只能注释html代码片段
+    2. jsp注释：推荐使用
+        &lt;%-- --%&gt;：可以注释所有
+</code></pre><h2 id="三、内置对象"><a href="#三、内置对象" class="headerlink" title="三、内置对象"></a>三、内置对象</h2><pre><code>    * 在jsp页面中不需要创建，直接使用的对象
+    * 一共有9个：
+            变量名                    真实类型                        作用
+        * pageContext                PageContext                    当前页面共享数据，还可以获取其他八个内置对象
+        * request                    HttpServletRequest            一次请求访问的多个资源(转发)
+        * session                    HttpSession                    一次会话的多个请求间
+        * application                ServletContext                所有用户间共享数据
+        * response                    HttpServletResponse            响应对象
+        * page                        Object                        当前页面(Servlet)的对象  this
+        * out                        JspWriter                    输出对象，数据输出到页面上
+        * config                    ServletConfig                Servlet的配置对象
+        * exception                    Throwable                    异常对象
+</code></pre><p>​    </p>
+<h1 id="MVC：开发模式"><a href="#MVC：开发模式" class="headerlink" title="MVC：开发模式"></a>MVC：开发模式</h1><h2 id="一、-jsp演变历史"><a href="#一、-jsp演变历史" class="headerlink" title="一、 jsp演变历史"></a>一、 jsp演变历史</h2><pre><code>    1. 早期只有servlet，只能使用response输出标签数据，非常麻烦
+    2. 后来又jsp，简化了Servlet的开发，如果过度使用jsp，在jsp中即写大量的java代码，有写html表，造成难于维护，难于分工协作
+    3. 再后来，java的web开发，借鉴mvc开发模式，使得程序的设计更加合理性
+</code></pre><h2 id="二、-MVC"><a href="#二、-MVC" class="headerlink" title="二、 MVC"></a>二、 MVC</h2><pre><code>    1. M：Model，模型。JavaBean
+        * 完成具体的业务操作，如：查询数据库，封装对象
+    2. V：View，视图。JSP
+        * 展示数据
+    3. C：Controller，控制器。Servlet
+        * 获取用户的输入
+        * 调用模型
+        * 将数据交给视图进行展示
+</code></pre><p><img src="/2020/08/03/JSP-MVC-EL-JSTL/MVC开发模式.bmp" alt="MVC开发模式"></p>
+<pre><code>    * 优缺点：
+        1. 优点：
+            1. 耦合性低，方便维护，可以利于分工协作
+            2. 重用性高
+
+        2. 缺点：
+            1. 使得项目架构变得复杂，对开发人员要求高
+</code></pre><h1 id="EL表达式"><a href="#EL表达式" class="headerlink" title="EL表达式"></a>EL表达式</h1><h2 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h2><pre><code>    Expression Language 表达式语言
+</code></pre><h2 id="二、作用"><a href="#二、作用" class="headerlink" title="二、作用"></a>二、作用</h2><pre><code>    替换和简化jsp页面中java代码的编写
+</code></pre><h2 id="三、语法"><a href="#三、语法" class="headerlink" title="三、语法"></a>三、语法</h2><pre><code>    ${表达式}
+</code></pre><h2 id="四、注意："><a href="#四、注意：" class="headerlink" title="四、注意："></a>四、注意：</h2><pre><code>    * jsp默认支持el表达式的。如果要忽略el表达式
+        1. 设置jsp中page指令中：isELIgnored=&quot;true&quot; 忽略当前jsp页面中所有的el表达式
+        2. \${表达式} ：忽略当前这个el表达式
+</code></pre><h2 id="五、使用："><a href="#五、使用：" class="headerlink" title="五、使用："></a>五、使用：</h2><h3 id="1-运算："><a href="#1-运算：" class="headerlink" title="1. 运算："></a>1. 运算：</h3><pre><code>        * 运算符：
+            1. 算数运算符： + - * /(div) %(mod)
+            2. 比较运算符： &gt; &lt; &gt;= &lt;= == !=
+            3. 逻辑运算符： &amp;&amp;(and) ||(or) !(not)
+            4. 空运算符： empty
+                * 功能：用于判断字符串、集合、数组对象是否为null或者长度是否为0
+                * ${empty list}:判断字符串、集合、数组对象是否为null或者长度为0
+                * ${not empty str}:表示判断字符串、集合、数组对象是否不为null 并且 长度&gt;0
+</code></pre><h3 id="2-获取值"><a href="#2-获取值" class="headerlink" title="2. 获取值"></a>2. 获取值</h3><pre><code>        1. el表达式只能从域对象中获取值
+        2. 语法：
+            1. ${域名称.键名}：从指定域中获取指定键的值
+                * 域名称：
+                    1. pageScope        --&gt; pageContext
+                    2. requestScope     --&gt; request
+                    3. sessionScope     --&gt; session
+                    4. applicationScope --&gt; application（ServletContext）
+                * 举例：在request域中存储了name=张三
+                * 获取：${requestScope.name}
+
+            2. ${键名}：表示依次从最小的域中查找是否有该键对应的值，直到找到为止。
+
+            3. 获取对象、List集合、Map集合的值
+                1. 对象：${域名称.键名.属性名}
+                    * 本质上会去调用对象的getter方法
+
+                2. List集合：${域名称.键名[索引]}
+
+                3. Map集合：
+                    * ${域名称.键名.key名称}
+                    * ${域名称.键名[&quot;key名称&quot;]}
+</code></pre><h3 id="3-隐式对象："><a href="#3-隐式对象：" class="headerlink" title="3. 隐式对象："></a>3. 隐式对象：</h3><pre><code>        * el表达式中有11个隐式对象
+        * pageContext：
+            * 获取jsp其他八个内置对象
+                * ${pageContext.request.contextPath}：动态获取虚拟目录
+</code></pre><p>​    </p>
+<h1 id="JSTL"><a href="#JSTL" class="headerlink" title="JSTL"></a>JSTL</h1><h2 id="一、概念-1"><a href="#一、概念-1" class="headerlink" title="一、概念"></a>一、概念</h2><pre><code>    JavaServer Pages Tag Library  JSP标准标签库
+    * 是由Apache组织提供的开源的免费的jsp标签        &lt;标签&gt;
+</code></pre><h2 id="二、作用-1"><a href="#二、作用-1" class="headerlink" title="二、作用"></a>二、作用</h2><p>用于简化和替换jsp页面上的java代码        </p>
+<h2 id="三、使用步骤："><a href="#三、使用步骤：" class="headerlink" title="三、使用步骤："></a>三、使用步骤：</h2><pre><code>    1. 导入jstl相关jar包
+    2. 引入标签库：taglib指令：  &lt;%@ taglib %&gt;
+    3. 使用标签
+</code></pre><h2 id="四、常用的JSTL标签"><a href="#四、常用的JSTL标签" class="headerlink" title="四、常用的JSTL标签"></a>四、常用的JSTL标签</h2><h3 id="1-if"><a href="#1-if" class="headerlink" title="1. if"></a>1. if</h3><p>相当于java代码的if语句</p>
+<pre><code>        1. 属性：
+            * test 必须属性，接受boolean表达式
+                * 如果表达式为true，则显示if标签体内容，如果为false，则不显示标签体内容
+                * 一般情况下，test属性值会结合el表达式一起使用
+            2. 注意：
+                * c:if标签没有else情况，想要else情况，则可以在定义一个c:if标签
+</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">    <span class="comment">//判断request域中的一个list集合是否为空，如果不为null则显示遍历集合</span></span><br><span class="line"></span><br><span class="line">    List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    list.add(<span class="string">"aaaa"</span>);</span><br><span class="line">    request.setAttribute(<span class="string">"list"</span>,list);</span><br><span class="line"></span><br><span class="line">    request.setAttribute(<span class="string">"number"</span>,<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">"$&#123;not empty list&#125;"</span>&gt;</span><br><span class="line">    遍历集合...</span><br><span class="line"></span><br><span class="line">&lt;/c:if&gt;</span><br><span class="line">&lt;br&gt;</span><br><span class="line"></span><br><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">"$&#123;number % 2 != 0&#125;"</span>&gt;</span><br><span class="line"></span><br><span class="line">        $&#123;number&#125;为奇数</span><br><span class="line"></span><br><span class="line">&lt;/c:if&gt;</span><br><span class="line"></span><br><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">"$&#123;number % 2 == 0&#125;"</span>&gt;</span><br><span class="line"></span><br><span class="line">    $&#123;number&#125;为偶数</span><br><span class="line"></span><br><span class="line">&lt;/c:if&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="2-choose"><a href="#2-choose" class="headerlink" title="2. choose"></a>2. choose</h3><p>相当于java代码的switch语句</p>
+<pre><code>        1. 使用choose标签声明                     相当于switch声明
+        2. 使用when标签做判断                     相当于case
+        3. 使用otherwise标签做其他情况的声明        相当于default
+</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;c:choose&gt;</span><br><span class="line">    &lt;c:when test="$&#123;number == 1&#125;"&gt;星期一&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test="$&#123;number == 2&#125;"&gt;星期二&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test="$&#123;number == 3&#125;"&gt;星期三&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test="$&#123;number == 4&#125;"&gt;星期四&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test="$&#123;number == 5&#125;"&gt;星期五&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test="$&#123;number == 6&#125;"&gt;星期六&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test="$&#123;number == 7&#125;"&gt;星期天&lt;/c:when&gt;</span><br><span class="line">    &lt;c:otherwise&gt;数字输入有误&lt;/c:otherwise&gt;</span><br><span class="line">&lt;/c:choose&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="3-foreach"><a href="#3-foreach" class="headerlink" title="3. foreach"></a>3. foreach</h3><p>相当于java代码的for语句</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&lt;%--</span><br><span class="line">    foreach:相当于java代码的<span class="keyword">for</span>语句</span><br><span class="line">        <span class="number">1</span>. 完成重复的操作</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i ++)&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            * 属性：</span><br><span class="line">                begin：开始值</span><br><span class="line">                end：结束值</span><br><span class="line">                <span class="keyword">var</span>：临时变量</span><br><span class="line">                step：步长</span><br><span class="line">                varStatus:循环状态对象</span><br><span class="line">                    index:容器中元素的索引，从<span class="number">0</span>开始</span><br><span class="line">                    count:循环次数，从<span class="number">1</span>开始</span><br><span class="line">        <span class="number">2</span>. 遍历容器</span><br><span class="line">            List&lt;User&gt; list;</span><br><span class="line">            <span class="keyword">for</span>(User user : list)&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            * 属性：</span><br><span class="line">                items:容器对象</span><br><span class="line">                <span class="keyword">var</span>:容器中元素的临时变量</span><br><span class="line">                varStatus:循环状态对象</span><br><span class="line">                    index:容器中元素的索引，从<span class="number">0</span>开始</span><br><span class="line">                    count:循环次数，从<span class="number">1</span>开始</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--%&gt;</span><br><span class="line"></span><br><span class="line">&lt;c:forEach begin=<span class="string">"1"</span> end=<span class="string">"10"</span> <span class="keyword">var</span>=<span class="string">"i"</span> step=<span class="string">"2"</span> varStatus=<span class="string">"s"</span>&gt;</span><br><span class="line">    $&#123;i&#125; &lt;h3&gt;$&#123;s.index&#125;&lt;h3&gt; &lt;h4&gt; $&#123;s.count&#125; &lt;/h4&gt;&lt;br&gt;</span><br><span class="line"></span><br><span class="line">&lt;/c:forEach&gt;</span><br><span class="line"></span><br><span class="line">    &lt;hr&gt;</span><br><span class="line"></span><br><span class="line">    &lt;%</span><br><span class="line">        List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        list.add(<span class="string">"aaa"</span>);</span><br><span class="line">        list.add(<span class="string">"bbb"</span>);</span><br><span class="line">        list.add(<span class="string">"ccc"</span>);</span><br><span class="line"></span><br><span class="line">        request.setAttribute(<span class="string">"list"</span>,list);</span><br><span class="line">    %&gt;</span><br><span class="line"></span><br><span class="line">    &lt;c:forEach items=<span class="string">"$&#123;list&#125;"</span> <span class="keyword">var</span>=<span class="string">"str"</span> varStatus=<span class="string">"s"</span>&gt;</span><br><span class="line"></span><br><span class="line">            $&#123;s.index&#125; $&#123;s.count&#125; $&#123;str&#125;&lt;br&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/c:forEach&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="五、练习："><a href="#五、练习：" class="headerlink" title="五、练习："></a>五、练习：</h2><pre><code>    * 需求：在request域中有一个存有User对象的List集合。需要使用jstl+el将list集合数据展示到jsp页面的表格table中
+</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">"java.util.ArrayList"</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">"java.util.List"</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">"cn.itcast.domain.User"</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">"java.util.Date"</span> %&gt;&lt;%--</span><br><span class="line">  Created by IntelliJ IDEA.</span><br><span class="line">  User: zenner</span><br><span class="line">  Date: <span class="number">2020</span>/<span class="number">8</span>/<span class="number">3</span></span><br><span class="line">  Time: <span class="number">11</span>:<span class="number">29</span></span><br><span class="line">  To change <span class="keyword">this</span> template use File | Settings | File Templates.</span><br><span class="line">--%&gt;</span><br><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;%<span class="meta">@taglib</span> prefix=<span class="string">"c"</span> uri=<span class="string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Test&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;%--准备数据--%&gt;</span><br><span class="line">&lt;%</span><br><span class="line">    List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    list.add(<span class="keyword">new</span> User(<span class="string">"张三"</span>,<span class="number">23</span>,<span class="keyword">new</span> Date()));</span><br><span class="line">    list.add(<span class="keyword">new</span> User(<span class="string">"李四"</span>,<span class="number">24</span>,<span class="keyword">new</span> Date()));</span><br><span class="line">    list.add(<span class="keyword">new</span> User(<span class="string">"王五"</span>,<span class="number">25</span>,<span class="keyword">new</span> Date()));</span><br><span class="line">    request.setAttribute(<span class="string">"list"</span>, list);</span><br><span class="line">%&gt;</span><br><span class="line">&lt;table border=<span class="string">"1"</span> width=<span class="string">"500"</span> align=<span class="string">"center"</span>&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;th&gt;编号&lt;/th&gt;</span><br><span class="line">        &lt;th&gt;姓名&lt;/th&gt;</span><br><span class="line">        &lt;th&gt;年龄&lt;/th&gt;</span><br><span class="line">        &lt;th&gt;生日&lt;/th&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">    &lt;%--  数据行  --%&gt;</span><br><span class="line">    &lt;c:forEach items=<span class="string">"$&#123;list&#125;"</span> <span class="keyword">var</span>=<span class="string">"user"</span> varStatus=<span class="string">"s"</span>&gt;</span><br><span class="line">        &lt;c:<span class="keyword">if</span> test=<span class="string">"$&#123;s.count%2==0&#125;"</span>&gt;</span><br><span class="line">            &lt;tr bgcolor=<span class="string">"red"</span>&gt;</span><br><span class="line">                &lt;td&gt;$&#123;s.count&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.name&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.age&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.birStr&#125;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/c:if&gt;</span><br><span class="line">        &lt;c:<span class="keyword">if</span> test=<span class="string">"$&#123;s.count%2!=0&#125;"</span>&gt;</span><br><span class="line">            &lt;tr bgcolor=<span class="string">"green"</span>&gt;</span><br><span class="line">                &lt;td&gt;$&#123;s.count&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.name&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.age&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.birStr&#125;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/c:if&gt;</span><br><span class="line">    &lt;/c:forEach&gt;</span><br><span class="line">&lt;/table&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="三层架构：软件设计架构"><a href="#三层架构：软件设计架构" class="headerlink" title="三层架构：软件设计架构"></a>三层架构：软件设计架构</h1><pre><code>1. 界面层(表示层)：用户看的得界面。用户可以通过界面上的组件和服务器进行交互
+2. 业务逻辑层：处理业务逻辑的。
+3. 数据访问层：操作数据存储文件。
+</code></pre><p><img src="/2020/08/03/JSP-MVC-EL-JSTL/三层架构.bmp" alt="三层架构"></p>
+<h1 id="案例：用户信息列表展示"><a href="#案例：用户信息列表展示" class="headerlink" title="案例：用户信息列表展示"></a>案例：用户信息列表展示</h1><pre><code>1. 需求：用户信息的增删改查操作
+2. 设计：
+    1. 技术选型：Servlet + JSP + MySQL + JDBCTemplate + Duird + BeanUtilS + tomcat
+    2. 数据库设计：
+        create database day17; -- 创建数据库
+        use day17;                -- 使用数据库
+        create table user(   -- 创建表
+            id int primary key auto_increment,
+            name varchar(20) not null,
+            gender varchar(5),
+            age int,
+            address varchar(32),
+            qq    varchar(20),
+            email varchar(50)
+        );
+
+3. 开发：
+    1. 环境搭建
+        1. 创建数据库环境
+        2. 创建项目，导入需要的jar包
+
+    2. 编码
+
+
+4. 测试
+5. 部署运维
+</code></pre><p><img src="/2020/08/03/JSP-MVC-EL-JSTL/列表查询分析.bmp" alt="列表查询分析"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/02/Cookie-Session-JSP/" rel="next" title="Cookie_Session_JSP">
+                <i class="fa fa-chevron-left"></i> Cookie_Session_JSP
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/05/Filter-Listener/" rel="prev" title="Filter_Listener">
+                Filter_Listener <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">Deep ploughing those days ​​​​</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/1956918893" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:juyi006@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://fivelike.xyz/" title="fivelike" target="_blank">fivelike</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.reachdong.cool/" title="ReachDong(dada)" target="_blank">ReachDong(dada)</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JSP"><span class="nav-text">JSP:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、指令"><span class="nav-text">一、指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-作用"><span class="nav-text">1. 作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-格式："><span class="nav-text">2. 格式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-分类："><span class="nav-text">3. 分类：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#page-：-配置JSP页面的"><span class="nav-text">page        ： 配置JSP页面的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#include-：-页面包含的。导入页面的资源文件"><span class="nav-text">include    ： 页面包含的。导入页面的资源文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#taglib-：-导入资源"><span class="nav-text">taglib    ： 导入资源</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、注释"><span class="nav-text">二、注释:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、内置对象"><span class="nav-text">三、内置对象</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MVC：开发模式"><span class="nav-text">MVC：开发模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、-jsp演变历史"><span class="nav-text">一、 jsp演变历史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、-MVC"><span class="nav-text">二、 MVC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EL表达式"><span class="nav-text">EL表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、概念"><span class="nav-text">一、概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、作用"><span class="nav-text">二、作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、语法"><span class="nav-text">三、语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、注意："><span class="nav-text">四、注意：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、使用："><span class="nav-text">五、使用：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-运算："><span class="nav-text">1. 运算：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-获取值"><span class="nav-text">2. 获取值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-隐式对象："><span class="nav-text">3. 隐式对象：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JSTL"><span class="nav-text">JSTL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、概念-1"><span class="nav-text">一、概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、作用-1"><span class="nav-text">二、作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、使用步骤："><span class="nav-text">三、使用步骤：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、常用的JSTL标签"><span class="nav-text">四、常用的JSTL标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-if"><span class="nav-text">1. if</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-choose"><span class="nav-text">2. choose</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-foreach"><span class="nav-text">3. foreach</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、练习："><span class="nav-text">五、练习：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三层架构：软件设计架构"><span class="nav-text">三层架构：软件设计架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例：用户信息列表展示"><span class="nav-text">案例：用户信息列表展示</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

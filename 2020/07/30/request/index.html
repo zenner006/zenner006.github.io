@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="web,http,request," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="HTTP协议：1. 请求消息：客户端发送给服务器端的数据     * 数据格式：         1. 请求行         2. 请求头         3. 请求空行         4. 请求体 2. 响应消息：服务器端发送给客户端的数据     * 数据格式：         1. 响应行             1. 组成：协议&#x2F;版本 响应状态码 状态码描述             2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="request">
+<meta property="og:url" content="http://yoursite.com/2020/07/30/request/index.html">
+<meta property="og:site_name" content="zenner&#39;s Blog">
+<meta property="og:description" content="HTTP协议：1. 请求消息：客户端发送给服务器端的数据     * 数据格式：         1. 请求行         2. 请求头         3. 请求空行         4. 请求体 2. 响应消息：服务器端发送给客户端的数据     * 数据格式：         1. 响应行             1. 组成：协议&#x2F;版本 响应状态码 状态码描述             2">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/request/image-20200731154135769.png">
+<meta property="article:published_time" content="2020-07-30T12:47:28.000Z">
+<meta property="article:modified_time" content="2020-08-01T12:20:27.282Z">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="http">
+<meta property="article:tag" content="request">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/07/30/request/image-20200731154135769.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/30/request/"/>
+
+
+
+
+
+  <title>request | zenner's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zenner's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">巨饼的技术博</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/30/request/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zenner's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">request</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-30T20:47:28+08:00">
+                2020-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="HTTP协议："><a href="#HTTP协议：" class="headerlink" title="HTTP协议："></a>HTTP协议：</h1><pre><code>1. 请求消息：客户端发送给服务器端的数据
+    * 数据格式：
+        1. 请求行
+        2. 请求头
+        3. 请求空行
+        4. 请求体
+2. 响应消息：服务器端发送给客户端的数据
+    * 数据格式：
+        1. 响应行
+            1. 组成：协议/版本 响应状态码 状态码描述
+            2. 响应状态码：服务器告诉客户端浏览器本次请求和响应的一个状态。
+                1. 状态码都是3位数字 
+                2. 分类：
+                    1. 1xx：服务器就收客户端消息，但没有接受完成，等待一段时间后，发送1xx多状态码
+                    2. 2xx：成功。代表：200
+                    3. 3xx：重定向。代表：302(重定向)，304(访问缓存)
+                    4. 4xx：客户端错误。
+                        * 代表：
+                            * 404（请求路径没有对应的资源） 
+                            * 405：请求方式没有对应的doXxx方法
+                    5. 5xx：服务器端错误。代表：500(服务器内部出现异常)
+</code></pre><a id="more"></a>
+<pre><code>        2. 响应头：
+            1. 格式：头名称： 值
+            2. 常见的响应头：
+                1. Content-Type：服务器告诉客户端本次响应体数据格式以及编码格式
+                2. Content-disposition：服务器告诉客户端以什么格式打开响应体数据
+                    * 值：
+                        * in-line:默认值,在当前页面内打开
+                        * attachment;filename=xxx：以附件形式打开响应体。文件下载
+        3. 响应空行
+        4. 响应体:传输的数据
+
+
+    * 响应字符串格式
+        HTTP/1.1 200 OK
+        Content-Type: text/html;charset=UTF-8
+        Content-Length: 101
+        Date: Wed, 06 Jun 2018 07:08:42 GMT
+
+        &lt;html&gt;
+          &lt;head&gt;
+            &lt;title&gt;$Title$&lt;/title&gt;
+          &lt;/head&gt;
+          &lt;body&gt;
+          hello , response
+          &lt;/body&gt;
+        &lt;/html&gt;
+</code></pre><h1 id="Response对象"><a href="#Response对象" class="headerlink" title="Response对象"></a>Response对象</h1><h2 id="一、功能：设置响应消息"><a href="#一、功能：设置响应消息" class="headerlink" title="一、功能：设置响应消息"></a>一、功能：设置响应消息</h2><h3 id="1-设置响应行"><a href="#1-设置响应行" class="headerlink" title="1. 设置响应行"></a>1. 设置响应行</h3><pre><code>        1. 格式：HTTP/1.1 200 ok
+        2. 设置状态码：setStatus(int sc) 
+</code></pre><h3 id="2-设置响应头："><a href="#2-设置响应头：" class="headerlink" title="2. 设置响应头："></a>2. 设置响应头：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setHeader(String name, String value)</span><br></pre></td></tr></table></figure>
+<h3 id="3-设置响应体："><a href="#3-设置响应体：" class="headerlink" title="3. 设置响应体："></a>3. 设置响应体：</h3><pre><code>        * 使用步骤：
+            1. 获取输出流
+                * 字符输出流：PrintWriter getWriter()
+
+                * 字节输出流：ServletOutputStream getOutputStream()
+
+            2. 使用输出流，将数据输出到客户端浏览器
+</code></pre><h2 id="二、案例："><a href="#二、案例：" class="headerlink" title="二、案例："></a>二、案例：</h2><h3 id="1-完成重定向"><a href="#1-完成重定向" class="headerlink" title="1. 完成重定向"></a>1. 完成重定向</h3><h4 id="重定向：资源跳转的方式"><a href="#重定向：资源跳转的方式" class="headerlink" title="重定向：资源跳转的方式"></a>重定向：资源跳转的方式</h4><p><img src="/2020/07/30/request/image-20200731154135769.png" alt="image-20200731154135769"><br> <strong>代码实现：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1. 设置状态码为302</span></span><br><span class="line">      response.setStatus(<span class="number">302</span>);</span><br><span class="line">      <span class="comment">//2.设置响应头location</span></span><br><span class="line">      response.setHeader(<span class="string">"location"</span>,<span class="string">"/day15/responseDemo2"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      <span class="comment">//简单的重定向方法</span></span><br><span class="line">      response.sendRedirect(<span class="string">"/day15/responseDemo2"</span>);</span><br></pre></td></tr></table></figure></p>
+<h4 id="重定向的特点-redirect"><a href="#重定向的特点-redirect" class="headerlink" title="重定向的特点:redirect"></a>重定向的特点:redirect</h4><pre><code>            1. 地址栏发生变化
+            2. 重定向可以访问其他站点(服务器)的资源
+            3. 重定向是两次请求。不能使用request对象来共享数据
+</code></pre><h4 id="转发的特点：forward"><a href="#转发的特点：forward" class="headerlink" title="转发的特点：forward"></a>转发的特点：forward</h4><pre><code>            1. 转发地址栏路径不变
+            2. 转发只能访问当前服务器下的资源
+            3. 转发是一次请求，可以使用request对象来共享数据
+</code></pre><p>上面这两个遇到面试题就可能被问到：forward 和  redirect 区别</p>
+<h4 id="路径写法："><a href="#路径写法：" class="headerlink" title="路径写法："></a>路径写法：</h4><pre><code>        1. 路径分类
+                1. 相对路径：通过相对路径不可以确定唯一资源
+                    * 如：./index.html
+                    * 不以/开头，以.开头路径
+
+                    * 规则：找到当前资源和目标资源之间的相对位置关系
+                        * ./：当前目录
+                        * ../:后退一级目录
+                2. 绝对路径：通过绝对路径可以确定唯一资源
+                    * 如：http://localhost/day15/responseDemo2        /day15/responseDemo2
+                    * 以/开头的路径
+
+                    * 规则：判断定义的路径是给谁用的？判断请求将来从哪儿发出
+                        * 给客户端浏览器使用：（重定向是给浏览器用）
+                            需要加虚拟目录(项目的访问路径)
+                            * 建议虚拟目录动态获取：request.getContextPath()
+                            * &lt;a&gt; , &lt;form&gt; 重定向...
+                        * 给服务器使用：（请求转发是给服务器端使用的）
+                            不需要加虚拟目录
+                            * 转发路径
+</code></pre><p>​<br>​                        </p>
+<h3 id="2-服务器输出字符数据到浏览器"><a href="#2-服务器输出字符数据到浏览器" class="headerlink" title="2. 服务器输出字符数据到浏览器"></a>2. 服务器输出字符数据到浏览器</h3><pre><code>        * 步骤：
+            1. 获取字符输出流
+            2. 输出数据
+
+        * 注意：
+            * 乱码问题：
+                1. PrintWriter pw = response.getWriter();获取的流的默认编码是ISO-8859-1
+                2. 设置该流的默认编码
+                3. 告诉浏览器响应体使用的编码
+
+                //简单的形式，设置编码，是在获取流之前设置
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@WebServlet</span>(<span class="string">"/responseDemo4"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ResponseDemo4</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 获取流对象之前，设置流的默认编码，ISO-8859-1 设置为GBK</span></span><br><span class="line"><span class="comment">//        resp.setCharacterEncoding("utf-8");</span></span><br><span class="line">        <span class="comment">// 告诉浏览器，服务器发送的消息数据的编码。建议浏览器使用该编码解码</span></span><br><span class="line">        <span class="comment">//resp.setHeader("content-type","text/html;charset=utf-8");   // 这一行不但设置了浏览器的编码而且也设置了流的编码，</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 简单形式，设置编码</span></span><br><span class="line">        resp.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</span><br><span class="line">        <span class="comment">// 1. 获取字符输出流</span></span><br><span class="line">        PrintWriter pw = resp.getWriter();</span><br><span class="line">        <span class="comment">// 2. 输出数据</span></span><br><span class="line">        <span class="comment">//pw.write("&lt;h1&gt;Hello response&lt;/h1&gt;");</span></span><br><span class="line">        pw.write(<span class="string">"&lt;h1&gt;你好啊 response&lt;/h1&gt;"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-服务器输出字节数据到浏览器"><a href="#3-服务器输出字节数据到浏览器" class="headerlink" title="3. 服务器输出字节数据到浏览器"></a>3. 服务器输出字节数据到浏览器</h3><pre><code>        * 步骤：
+            1. 获取字节输出流
+            2. 输出数据
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    resp.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</span><br><span class="line">    <span class="comment">// 获取字节输出流</span></span><br><span class="line">    ServletOutputStream sos = resp.getOutputStream();</span><br><span class="line">    <span class="comment">// 输出数据</span></span><br><span class="line">    sos.write(<span class="string">"霓虹呀"</span>.getBytes(<span class="string">"utf-8"</span>));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-验证码"><a href="#4-验证码" class="headerlink" title="4. 验证码"></a>4. 验证码</h3><pre><code>        1. 本质：图片
+        2. 目的：防止恶意表单注册
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.zenner.web.servlet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.awt.*;</span><br><span class="line"><span class="keyword">import</span> java.awt.image.BufferedImage;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="meta">@WebServlet</span>(<span class="string">"/checkCodeServlet"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CheckCodeServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> width = <span class="number">200</span>;</span><br><span class="line">        <span class="keyword">int</span> height = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1. 创建一个对象能在内存画图（验证码图片对象）</span></span><br><span class="line">        BufferedImage Image = <span class="keyword">new</span> BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);</span><br><span class="line">        <span class="comment">// 2. 美化图片</span></span><br><span class="line">        <span class="comment">// 2.1 填充背景色</span></span><br><span class="line">        Graphics g = Image.getGraphics();</span><br><span class="line">        g.setColor(Color.pink);</span><br><span class="line">        g.fill3DRect(<span class="number">0</span>, <span class="number">0</span>, width, height, <span class="keyword">true</span>);</span><br><span class="line">        <span class="comment">// 2.2 画边框</span></span><br><span class="line">        g.setColor(Color.BLUE);</span><br><span class="line">        g.drawRect(<span class="number">0</span>, <span class="number">0</span>, width-<span class="number">1</span>, height-<span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 2.3 写验证码</span></span><br><span class="line">        String str = <span class="string">"ABCDEFGHIGKLMNOPQRSTUVWXYabcdefghigklmnopqrstuvwxyz0123456789"</span>;</span><br><span class="line">        <span class="comment">// 生成随机角标</span></span><br><span class="line">        Random ran = <span class="keyword">new</span> Random();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = ran.nextInt(str.length());</span><br><span class="line">            <span class="keyword">char</span> c = str.charAt(j);</span><br><span class="line">            g.drawString(c+<span class="string">""</span>, width/<span class="number">5</span>*(i+<span class="number">1</span>), height/<span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 2.4 画干扰线</span></span><br><span class="line">        g.setColor(Color.GREEN);</span><br><span class="line">        <span class="comment">// 2.4.1 随机生成坐标点</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> x1 = ran.nextInt(width);</span><br><span class="line">            <span class="keyword">int</span> x2 = ran.nextInt(width);</span><br><span class="line">            <span class="keyword">int</span> y1 = ran.nextInt(height);</span><br><span class="line">            <span class="keyword">int</span> y2 = ran.nextInt(height);</span><br><span class="line">            g.drawLine(x1,y1,x2,y2);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 将图片输出到页面展示</span></span><br><span class="line">        ImageIO.write(Image,<span class="string">"jpg"</span>, resp.getOutputStream());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.doPost(req,resp);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line">        /*</span><br><span class="line">            分析：</span><br><span class="line">                点击超链接或者图片，需要换一张验证码图片</span><br><span class="line">                1.给超链接和图片绑定单击事件</span><br><span class="line"></span><br><span class="line">                2. 重新设置图片的src属性值</span><br><span class="line">        */</span><br><span class="line"><span class="javascript">        <span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> img = <span class="built_in">document</span>.getElementById(<span class="string">"checkCode"</span>);</span></span><br><span class="line"><span class="actionscript">            img.onclick = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                <span class="comment">// 加时间戳</span></span></span><br><span class="line"><span class="javascript">                <span class="keyword">var</span> date = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span></span><br><span class="line"><span class="actionscript">                img.src = <span class="string">"/day15/checkCodeServlet?"</span>+date;</span></span><br><span class="line">            &#125;</span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> a = <span class="built_in">document</span>.getElementById(<span class="string">"check"</span>);</span></span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"><span class="actionscript">        <span class="function"><span class="keyword">function</span> <span class="title">b</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> img = <span class="built_in">document</span>.getElementById(<span class="string">"checkCode"</span>);</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> date = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span></span><br><span class="line"><span class="actionscript">            img.src = <span class="string">"/day15/checkCodeServlet?"</span>+date;</span></span><br><span class="line">        &#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">"checkCode"</span> <span class="attr">src</span>=<span class="string">"/day15/checkCodeServlet"</span> <span class="attr">alt</span>=<span class="string">""</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"change"</span> <span class="attr">href</span>=<span class="string">"#"</span> <span class="attr">onclick</span>=<span class="string">"b()"</span>&gt;</span>看不清换一张？<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="ServletContext对象："><a href="#ServletContext对象：" class="headerlink" title="ServletContext对象："></a>ServletContext对象：</h1><h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h2><pre><code>    代表整个web应用，可以和程序的容器(服务器)来通信
+</code></pre><h2 id="2-获取："><a href="#2-获取：" class="headerlink" title="2. 获取："></a>2. 获取：</h2><pre><code>    1. 通过request对象获取
+        request.getServletContext();
+    2. 通过HttpServlet获取
+        this.getServletContext();
+</code></pre><h2 id="3-功能："><a href="#3-功能：" class="headerlink" title="3. 功能："></a>3. 功能：</h2><h3 id="1-获取MIME类型："><a href="#1-获取MIME类型：" class="headerlink" title="(1) 获取MIME类型："></a>(1) 获取MIME类型：</h3><pre><code>        * MIME类型:在互联网通信过程中定义的一种文件数据类型
+            * 格式： 大类型/小类型   text/html        image/jpeg
+
+        * 获取：String getMimeType(String file)  
+</code></pre><h3 id="2-域对象：共享数据"><a href="#2-域对象：共享数据" class="headerlink" title="(2) 域对象：共享数据"></a>(2) 域对象：共享数据</h3><pre><code>        1. setAttribute(String name,Object value)
+        2. getAttribute(String name)
+        3. removeAttribute(String name)
+
+        * ServletContext对象范围：所有用户所有请求的数据
+</code></pre><h3 id="3-获取文件的真实-服务器-路径"><a href="#3-获取文件的真实-服务器-路径" class="headerlink" title="(3) 获取文件的真实(服务器)路径"></a>(3) 获取文件的真实(服务器)路径</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>. 方法：<span class="function">String <span class="title">getRealPath</span><span class="params">(String path)</span>  </span></span><br><span class="line"><span class="function">	 String b </span>= context.getRealPath(<span class="string">"/b.txt"</span>);<span class="comment">//web目录下资源访问</span></span><br><span class="line">        System.out.println(b);</span><br><span class="line">	</span><br><span class="line">       String c = context.getRealPath(<span class="string">"/WEB-INF/c.txt"</span>);<span class="comment">//WEB-INF目录下的资源访问</span></span><br><span class="line">       System.out.println(c);</span><br><span class="line">	</span><br><span class="line">       String a = context.getRealPath(<span class="string">"/WEB-INF/classes/a.txt"</span>);<span class="comment">//src目录下的资源访问</span></span><br><span class="line">       System.out.println(a);</span><br></pre></td></tr></table></figure>
+<h1 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h1><pre><code>* 文件下载需求：
+    1. 页面显示超链接
+    2. 点击超链接后弹出下载提示框
+    3. 完成图片文件下载
+
+
+* 分析：
+    1. 超链接指向的资源如果能够被浏览器解析，则在浏览器中展示，如果不能解析，则弹出下载提示框。不满足需求
+    2. 任何资源都必须弹出下载提示框
+    3. 使用响应头设置资源的打开方式：
+        * content-disposition:attachment;filename=xxx
+
+
+* 步骤：
+    1. 定义页面，编辑超链接href属性，指向Servlet，传递资源名称filename
+    2. 定义Servlet
+        1. 获取文件名称
+        2. 使用字节输入流加载文件进内存
+        3. 指定response的响应头： content-disposition:attachment;filename=xxx
+        4. 将数据写出到response输出流
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.zenner.web.download;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletContext;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletOutputStream;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@WebServlet</span>(<span class="string">"/downloadServlet"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DownloadServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 1. 获取请求参数，文件名称</span></span><br><span class="line">        String filename = req.getParameter(<span class="string">"filename"</span>);</span><br><span class="line">        <span class="comment">// 2. 使用字节输入流加载文件进内存</span></span><br><span class="line">        <span class="comment">// 2.1 找到文件服务器路径</span></span><br><span class="line">        ServletContext servletContext = <span class="keyword">this</span>.getServletContext();</span><br><span class="line">        String realPath = servletContext.getRealPath(<span class="string">"/img/"</span>+filename);</span><br><span class="line">        <span class="comment">// 2.2 使用字节输入流关联</span></span><br><span class="line">        FileInputStream fis = <span class="keyword">new</span> FileInputStream(realPath);</span><br><span class="line">        <span class="comment">// 3. 设置response响应头</span></span><br><span class="line">        <span class="comment">// 3.1 设置响应头类型：content-type</span></span><br><span class="line">        String mimeType = servletContext.getMimeType(filename);</span><br><span class="line">        resp.setHeader(<span class="string">"content-type"</span>,<span class="string">"mimeType"</span>);</span><br><span class="line">        <span class="comment">// 3.2 设置响应头打开方式: content-disposition</span></span><br><span class="line">        resp.setHeader(<span class="string">"content-disposition"</span>,<span class="string">"attachment;filename="</span>+filename);</span><br><span class="line">        <span class="comment">// 3. 将输入流的数据写出到输出流中</span></span><br><span class="line">        ServletOutputStream sos = resp.getOutputStream();</span><br><span class="line">        <span class="keyword">byte</span>[] buff = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>*<span class="number">8</span>];</span><br><span class="line">        <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>((len = fis.read(buff)) != -<span class="number">1</span>)&#123;</span><br><span class="line">            sos.write(buff,<span class="number">0</span>,len);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.doPost(req, resp);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>* 问题：
+    * 中文文件问题
+        * 解决思路：
+            1. 获取客户端使用的浏览器版本信息
+            2. 根据不同的版本信息，设置filename的编码方式不同
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web/" rel="tag"># web</a>
+          
+            <a href="/tags/http/" rel="tag"># http</a>
+          
+            <a href="/tags/request/" rel="tag"># request</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/30/IDEA/" rel="next" title="IDEA的开发环境配置">
+                <i class="fa fa-chevron-left"></i> IDEA的开发环境配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/02/Cookie-Session-JSP/" rel="prev" title="Cookie_Session_JSP">
+                Cookie_Session_JSP <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">Deep ploughing those days ​​​​</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/1956918893" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:juyi006@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://fivelike.xyz/" title="fivelike" target="_blank">fivelike</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.reachdong.cool/" title="ReachDong(dada)" target="_blank">ReachDong(dada)</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP协议："><span class="nav-text">HTTP协议：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Response对象"><span class="nav-text">Response对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、功能：设置响应消息"><span class="nav-text">一、功能：设置响应消息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-设置响应行"><span class="nav-text">1. 设置响应行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-设置响应头："><span class="nav-text">2. 设置响应头：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-设置响应体："><span class="nav-text">3. 设置响应体：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、案例："><span class="nav-text">二、案例：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-完成重定向"><span class="nav-text">1. 完成重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#重定向：资源跳转的方式"><span class="nav-text">重定向：资源跳转的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重定向的特点-redirect"><span class="nav-text">重定向的特点:redirect</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#转发的特点：forward"><span class="nav-text">转发的特点：forward</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#路径写法："><span class="nav-text">路径写法：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-服务器输出字符数据到浏览器"><span class="nav-text">2. 服务器输出字符数据到浏览器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-服务器输出字节数据到浏览器"><span class="nav-text">3. 服务器输出字节数据到浏览器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-验证码"><span class="nav-text">4. 验证码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ServletContext对象："><span class="nav-text">ServletContext对象：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概念"><span class="nav-text">1. 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-获取："><span class="nav-text">2. 获取：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-功能："><span class="nav-text">3. 功能：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-获取MIME类型："><span class="nav-text">(1) 获取MIME类型：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-域对象：共享数据"><span class="nav-text">(2) 域对象：共享数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-获取文件的真实-服务器-路径"><span class="nav-text">(3) 获取文件的真实(服务器)路径</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例："><span class="nav-text">案例：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

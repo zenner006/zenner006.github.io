@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数据库的基本概念1. 数据库的英文单词： DataBase 简称 ： DB 2. 什么数据库？     * 用于存储和管理数据的仓库。  3. 数据库的特点：     1. 持久化存储数据的。其实数据库就是一个文件系统     2. 方便存储和管理数据     3. 使用了统一的方式操作数据库 -- SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库基础">
+<meta property="og:url" content="http://yoursite.com/2020/07/17/Databases/index.html">
+<meta property="og:site_name" content="zenner&#39;s Blog">
+<meta property="og:description" content="数据库的基本概念1. 数据库的英文单词： DataBase 简称 ： DB 2. 什么数据库？     * 用于存储和管理数据的仓库。  3. 数据库的特点：     1. 持久化存储数据的。其实数据库就是一个文件系统     2. 方便存储和管理数据     3. 使用了统一的方式操作数据库 -- SQL">
+<meta property="og:locale" content="zh">
+<meta property="article:published_time" content="2020-07-17T00:26:19.000Z">
+<meta property="article:modified_time" content="2020-07-18T10:26:01.766Z">
+<meta property="article:tag" content="dive into">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/17/Databases/"/>
+
+
+
+
+
+  <title>数据库基础 | zenner's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zenner's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">巨饼的技术博</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/17/Databases/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zenner's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据库基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-17T08:26:19+08:00">
+                2020-07-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数据库的基本概念"><a href="#数据库的基本概念" class="headerlink" title="数据库的基本概念"></a>数据库的基本概念</h1><pre><code>1. 数据库的英文单词： DataBase 简称 ： DB
+2. 什么数据库？
+    * 用于存储和管理数据的仓库。
+
+3. 数据库的特点：
+    1. 持久化存储数据的。其实数据库就是一个文件系统
+    2. 方便存储和管理数据
+    3. 使用了统一的方式操作数据库 -- SQL
+</code></pre><a id="more"></a>
+<pre><code>4. 常见的数据库软件
+    * 参见《MySQL基础.pdf》
+</code></pre><h1 id="MySQL数据库软件"><a href="#MySQL数据库软件" class="headerlink" title="MySQL数据库软件"></a>MySQL数据库软件</h1><pre><code>1. 安装
+    * 参见《MySQL基础.pdf》
+2. 卸载
+    1. 去mysql的安装目录找到my.ini文件
+        * 复制 datadir=&quot;C:/ProgramData/MySQL/MySQL Server 5.5/Data/&quot;
+    2. 卸载MySQL
+    3. 删除C:/ProgramData目录下的MySQL文件夹。
+
+3. 配置
+    * MySQL服务启动
+        1. 手动。
+        2. cmd--&gt; services.msc 打开服务的窗口
+        3. 使用管理员打开cmd
+            * net start mysql : 启动mysql的服务
+            * net stop mysql:关闭mysql服务
+    * MySQL登录
+        1. mysql -uroot -p密码
+        2. mysql -h[ip] -uroot -p连接目标的密码
+        3. mysql --host=ip --user=root --password=连接目标的密码
+    * MySQL退出
+        1. exit
+        2. quit
+
+    * MySQL目录结构
+        1. MySQL安装目录：basedir=&quot;D:/develop/MySQL/&quot;
+            * 配置文件 my.ini
+        2. MySQL数据目录：datadir=&quot;C:/ProgramData/MySQL/MySQL Server 5.5/Data/&quot;
+            * 几个概念
+                * 数据库：文件夹
+                * 表：文件
+                * 数据：数据
+</code></pre><h1 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h1><pre><code>1.什么是SQL？
+    Structured Query Language：结构化查询语言
+    其实就是定义了操作所有关系型数据库的规则。每一种数据库操作的方式存在不一样的地方，称为“方言”。
+
+2.SQL通用语法
+    1. SQL 语句可以单行或多行书写，以分号结尾。
+    2. 可使用空格和缩进来增强语句的可读性。
+    3. MySQL 数据库的 SQL 语句不区分大小写，关键字建议使用大写。
+    4. 3 种注释
+        * 单行注释: -- 注释内容 或 # 注释内容(mysql 特有) （--后应有空格才起作用）
+        * 多行注释: /* 注释 */
+
+3. SQL分类
+    1) DDL(Data Definition Language)数据定义语言
+        用来定义数据库对象：数据库，表，列等。关键字：create, drop,alter 等
+    2) DML(Data Manipulation Language)数据操作语言
+        用来对数据库中表的数据进行增删改。关键字：insert, delete, update 等
+    3) DQL(Data Query Language)数据查询语言
+        用来查询数据库中表的记录(数据)。关键字：select, where 等
+    4) DCL(Data Control Language)数据控制语言(了解)
+        用来定义数据库的访问权限和安全级别，及创建用户。关键字：GRANT， REVOKE 等
+</code></pre><h2 id="DDL-操作数据库、表"><a href="#DDL-操作数据库、表" class="headerlink" title="DDL:操作数据库、表"></a>DDL:操作数据库、表</h2><h3 id="一、操作数据库：CRUD"><a href="#一、操作数据库：CRUD" class="headerlink" title="一、操作数据库：CRUD"></a>一、操作数据库：CRUD</h3><h4 id="1-C-Create-创建"><a href="#1-C-Create-创建" class="headerlink" title="1. C(Create):创建"></a>1. C(Create):创建</h4><pre><code>        * 创建数据库：
+            * create database 数据库名称;
+        * 创建数据库，判断不存在，再创建：
+            * create database if not exists 数据库名称;
+        * 创建数据库，并指定字符集 
+            * create database 数据库名称 character set 字符集名;
+
+        * 练习： 创建db4数据库，判断是否存在，并制定字符集为gbk
+            * create database if not exists db4 character set gbk;
+</code></pre><h4 id="2-R-Retrieve-：查询"><a href="#2-R-Retrieve-：查询" class="headerlink" title="2. R(Retrieve)：查询"></a>2. R(Retrieve)：查询</h4><pre><code>        * 查询所有数据库的名称:
+            * show databases;
+        * 查询某个数据库的字符集:查询某个数据库的创建语句
+            * show create database 数据库名称;
+</code></pre><h4 id="3-U-Update-修改"><a href="#3-U-Update-修改" class="headerlink" title="3. U(Update):修改"></a>3. U(Update):修改</h4><pre><code>        * 修改数据库的字符集
+            * alter database 数据库名称 character set 字符集名称;
+</code></pre><h4 id="4-D-Delete-删除"><a href="#4-D-Delete-删除" class="headerlink" title="4. D(Delete):删除"></a>4. D(Delete):删除</h4><pre><code>        * 删除数据库
+            * drop database 数据库名称;
+        * 判断数据库存在，存在再删除
+            * drop database if exists 数据库名称;
+</code></pre><h4 id="5-使用数据库"><a href="#5-使用数据库" class="headerlink" title="5. 使用数据库"></a>5. 使用数据库</h4><pre><code>        * 查询当前正在使用的数据库名称
+            * select database();
+        * 使用数据库
+            * use 数据库名称;
+</code></pre><h3 id="二、操作表"><a href="#二、操作表" class="headerlink" title="二、操作表"></a>二、操作表</h3><h4 id="1-C-Create-创建-1"><a href="#1-C-Create-创建-1" class="headerlink" title="1. C(Create):创建"></a>1. C(Create):创建</h4><pre><code>        1. 语法：
+            create table 表名(
+                列名1 数据类型1,
+                列名2 数据类型2,
+                ....
+                列名n 数据类型n
+            );
+            * 注意：最后一列，不需要加逗号（,）
+
+            * 数据库类型：
+                1. int：整数类型
+                    * age int,
+                2. double:小数类型
+                    * score double(5,2)
+                3. date:日期，只包含年月日，yyyy-MM-dd
+                4. datetime:日期，包含年月日时分秒     yyyy-MM-dd HH:mm:ss
+                5. timestamp:时间错类型    包含年月日时分秒     yyyy-MM-dd HH:mm:ss     
+                    * 如果将来不给这个字段赋值，或赋值为null，则默认使用当前的系统时间，来自动赋值
+                6. varchar：字符串
+                    * name varchar(20):姓名最大20个字符
+                    * zhangsan 8个字符  张三 2个字符
+        * 创建表
+            create table student(
+                id int,
+                name varchar(32),
+                age int ,
+                score double(4,1),
+                birthday date,
+                insert_time timestamp
+            );
+        * 复制表：
+            * create table 表名 like 被复制的表名;          
+</code></pre><h4 id="2-R-Retrieve-：查询-1"><a href="#2-R-Retrieve-：查询-1" class="headerlink" title="2. R(Retrieve)：查询"></a>2. R(Retrieve)：查询</h4><pre><code>        * 查询某个数据库中所有的表名称
+            * show tables;
+        * 查询表结构
+            * desc 表名;
+</code></pre><h4 id="3-U-Update-修改-1"><a href="#3-U-Update-修改-1" class="headerlink" title="3. U(Update):修改"></a>3. U(Update):修改</h4><pre><code>        1. 修改表名
+            alter table 表名 rename to 新的表名;
+        2. 修改表的字符集
+            alter table 表名 character set 字符集名称;
+        3. 添加一列
+            alter table 表名 add 列名 数据类型;
+        4. 修改列名称 类型
+            alter table 表名 change 列名 新列别 新数据类型;
+            alter table 表名 modify 列名 新数据类型;
+        5. 删除列
+            alter table 表名 drop 列名;
+</code></pre><h4 id="4-D-Delete-删除-1"><a href="#4-D-Delete-删除-1" class="headerlink" title="4. D(Delete):删除"></a>4. D(Delete):删除</h4><pre><code>        * drop table 表名;
+        * drop table  if exists 表名 ;
+</code></pre><ul>
+<li>客户端图形化工具：SQLYog</li>
+</ul>
+<h2 id="DML：增删改表中数据"><a href="#DML：增删改表中数据" class="headerlink" title="DML：增删改表中数据"></a>DML：增删改表中数据</h2><h3 id="1-添加数据："><a href="#1-添加数据：" class="headerlink" title="1. 添加数据："></a>1. 添加数据：</h3><pre><code>    * 语法：
+        * insert into 表名(列名1,列名2,...列名n) values(值1,值2,...值n);
+    * 注意：
+        1. 列名和值要一一对应。
+        2. 如果表名后，不定义列名，则默认给所有列添加值
+            insert into 表名 values(值1,值2,...值n);
+        3. 除了数字类型，其他类型需要使用引号(单双都可以)引起来
+</code></pre><h3 id="2-删除数据："><a href="#2-删除数据：" class="headerlink" title="2. 删除数据："></a>2. 删除数据：</h3><pre><code>    * 语法：
+        * delete from 表名 [where 条件]
+    * 注意：
+        1. 如果不加条件，则删除表中所有记录。
+        2. 如果要删除所有记录
+            1. delete from 表名; -- 不推荐使用。有多少条记录就会执行多少次删除操作
+            2. TRUNCATE TABLE 表名; -- 推荐使用，效率更高 先删除表，然后再创建一张一样的表。
+</code></pre><h3 id="3-修改数据："><a href="#3-修改数据：" class="headerlink" title="3. 修改数据："></a>3. 修改数据：</h3><pre><code>    * 语法：
+        * update 表名 set 列名1 = 值1, 列名2 = 值2,... [where 条件];
+
+    * 注意：
+        1. 如果不加任何条件，则会将表中所有记录全部修改。
+</code></pre><h2 id="DQL：查询表中的记录"><a href="#DQL：查询表中的记录" class="headerlink" title="DQL：查询表中的记录"></a>DQL：查询表中的记录</h2><pre><code>* select * from 表名;
+</code></pre><p>​    </p>
+<h3 id="1-语法："><a href="#1-语法：" class="headerlink" title="1. 语法："></a>1. 语法：</h3><pre><code>    select
+        字段列表
+    from
+        表名列表
+    where
+        条件列表
+    group by
+        分组字段
+    having
+        分组之后的条件
+    order by
+        排序
+    limit
+        分页限定
+</code></pre><h3 id="2-基础查询"><a href="#2-基础查询" class="headerlink" title="2. 基础查询"></a>2. 基础查询</h3><pre><code>    1. 多个字段的查询
+        select 字段名1，字段名2... from 表名；
+        * 注意：
+            * 如果查询所有字段，则可以使用*来替代字段列表。
+    2. 去除重复：
+        * distinct
+    3. 计算列
+        * 一般可以使用四则运算计算一些列的值。（一般只会进行数值型的计算）
+        * ifnull(表达式1,表达式2)：null参与的运算，计算结果都为null
+            * 表达式1：哪个字段需要判断是否为null
+            * 如果该字段为null后的替换值。
+    4. 起别名：
+        * as：as也可以省略
+</code></pre><h3 id="3-条件查询"><a href="#3-条件查询" class="headerlink" title="3. 条件查询"></a>3. 条件查询</h3><h4 id="1-where子句后跟条件"><a href="#1-where子句后跟条件" class="headerlink" title="(1) where子句后跟条件"></a>(1) where子句后跟条件</h4><h4 id="2-运算符"><a href="#2-运算符" class="headerlink" title="(2) 运算符"></a>(2) 运算符</h4><pre><code>        * &gt; 、&lt; 、&lt;= 、&gt;= 、= 、&lt;&gt;
+        * BETWEEN...AND  
+        * IN( 集合) 
+        * LIKE：模糊查询
+            * 占位符：
+                * _:单个任意字符
+                * %：多个任意字符
+        * IS NULL  
+        * and  或 &amp;&amp;
+        * or  或 || 
+        * not  或 !
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">-- 查询年龄大于20岁</span><br><span class="line">	</span><br><span class="line">SELECT * FROM student WHERE age &gt; 20;</span><br><span class="line"></span><br><span class="line">SELECT * FROM student WHERE age &gt;&#x3D; 20;</span><br><span class="line"></span><br><span class="line">-- 查询年龄等于20岁</span><br><span class="line">SELECT * FROM student WHERE age &#x3D; 20;</span><br><span class="line"></span><br><span class="line">-- 查询年龄不等于20岁</span><br><span class="line">SELECT * FROM student WHERE age !&#x3D; 20;</span><br><span class="line">SELECT * FROM student WHERE age &lt;&gt; 20;</span><br><span class="line"></span><br><span class="line">-- 查询年龄大于等于20 小于等于30</span><br><span class="line"></span><br><span class="line">SELECT * FROM student WHERE age &gt;&#x3D; 20 &amp;&amp;  age &lt;&#x3D;30;</span><br><span class="line">SELECT * FROM student WHERE age &gt;&#x3D; 20 AND  age &lt;&#x3D;30;</span><br><span class="line">SELECT * FROM student WHERE age BETWEEN 20 AND 30;</span><br><span class="line"></span><br><span class="line">-- 查询年龄22岁，18岁，25岁的信息</span><br><span class="line">SELECT * FROM student WHERE age &#x3D; 22 OR age &#x3D; 18 OR age &#x3D; 25</span><br><span class="line">SELECT * FROM student WHERE age IN (22,18,25);</span><br><span class="line"></span><br><span class="line">-- 查询英语成绩为null</span><br><span class="line">SELECT * FROM student WHERE english &#x3D; NULL; -- 不对的。null值不能使用 &#x3D; （!&#x3D;） 判断</span><br><span class="line"></span><br><span class="line">SELECT * FROM student WHERE english IS NULL;</span><br><span class="line"></span><br><span class="line">-- 查询英语成绩不为null</span><br><span class="line">SELECT * FROM student WHERE english  IS NOT NULL;</span><br><span class="line"></span><br><span class="line">-- 查询姓马的有哪些？ like</span><br><span class="line">SELECT * FROM student WHERE NAME LIKE &#39;马%&#39;;</span><br><span class="line">-- 查询姓名第二个字是化的人</span><br><span class="line"></span><br><span class="line">SELECT * FROM student WHERE NAME LIKE &quot;_化%&quot;;</span><br><span class="line">			</span><br><span class="line">-- 查询姓名是3个字的人</span><br><span class="line">SELECT * FROM student WHERE NAME LIKE &#39;___&#39;;</span><br><span class="line">-- 查询姓名中包含德的人</span><br><span class="line">SELECT * FROM student WHERE NAME LIKE &#39;%德%&#39;;</span><br></pre></td></tr></table></figure>
+<h1 id="DQL-查询语句"><a href="#DQL-查询语句" class="headerlink" title="DQL:查询语句"></a>DQL:查询语句</h1><h2 id="1-排序查询"><a href="#1-排序查询" class="headerlink" title="1. 排序查询"></a>1. 排序查询</h2><pre><code>    * 语法：order by 子句
+        * order by 排序字段1 排序方式1 ，  排序字段2 排序方式2...
+
+    * 排序方式：
+        * ASC：升序，默认的。
+        * DESC：降序。
+
+    * 注意：
+        * 如果有多个排序条件，则当前边的条件值一样时，才会判断第二条件。
+</code></pre><h2 id="2-聚合函数"><a href="#2-聚合函数" class="headerlink" title="2. 聚合函数"></a>2. 聚合函数</h2><p>将一列数据作为一个整体，进行纵向的计算。</p>
+<pre><code>    1. count：计算个数
+        1. 一般选择非空的列：主键
+        2. count(*)
+    2. max：计算最大值
+    3. min：计算最小值
+    4. sum：计算和
+    5. avg：计算平均值
+    * 注意：聚合函数的计算，排除null值。
+        解决方案：
+            1. 选择不包含非空的列进行计算
+            2. IFNULL函数
+
+    例：SELECT count(name) FROM student; 
+</code></pre><h2 id="3-分组查询"><a href="#3-分组查询" class="headerlink" title="3. 分组查询:"></a>3. 分组查询:</h2><pre><code>    1. 语法：group by 分组字段；
+    2. 注意：
+        1. 分组之后查询的字段：分组字段、聚合函数
+        2. where 和 having 的区别？
+            1. where 在分组之前进行限定，如果不满足条件，则不参与分组。having在分组之后进行限定，如果不满足结果，则不会被查询出来
+            2. where 后不可以跟聚合函数，having可以进行聚合函数的判断。
+
+        -- 按照性别分组。分别查询男、女同学的平均分
+
+        SELECT sex , AVG(math) FROM student GROUP BY sex;
+
+        -- 按照性别分组。分别查询男、女同学的平均分,人数
+
+        SELECT sex , AVG(math),COUNT(id) FROM student GROUP BY sex;
+
+        --  按照性别分组。分别查询男、女同学的平均分,人数 要求：分数低于70分的人，不参与分组
+        SELECT sex , AVG(math),COUNT(id) FROM student WHERE math &gt; 70 GROUP BY sex;
+
+        --  按照性别分组。分别查询男、女同学的平均分,人数 要求：分数低于70分的人，不参与分组,分组之后。人数要大于2个人
+        SELECT sex , AVG(math),COUNT(id) FROM student WHERE math &gt; 70 GROUP BY sex HAVING COUNT(id) &gt; 2;
+
+        SELECT sex , AVG(math),COUNT(id) 人数 FROM student WHERE math &gt; 70 GROUP BY sex HAVING 人数 &gt; 2;
+</code></pre><p>​            </p>
+<h2 id="4-分页查询"><a href="#4-分页查询" class="headerlink" title="4. 分页查询"></a>4. 分页查询</h2><pre><code>    1. 语法：limit 开始的索引,每页查询的条数;
+    2. 公式：开始的索引 = （当前的页码 - 1） * 每页显示的条数
+        -- 每页显示3条记录 
+
+        SELECT * FROM student LIMIT 0,3; -- 第1页
+
+        SELECT * FROM student LIMIT 3,3; -- 第2页
+
+        SELECT * FROM student LIMIT 6,3; -- 第3页
+
+
+    3. limit 是一个MySQL&quot;方言&quot;
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/16/network-prigramming/" rel="next" title="网络编程">
+                <i class="fa fa-chevron-left"></i> 网络编程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/17/MySql-constraint/" rel="prev" title="MySql约束">
+                MySql约束 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">Deep ploughing those days ​​​​</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/1956918893" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:juyi006@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://fivelike.xyz/" title="fivelike" target="_blank">fivelike</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.reachdong.cool/" title="ReachDong(dada)" target="_blank">ReachDong(dada)</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库的基本概念"><span class="nav-text">数据库的基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL数据库软件"><span class="nav-text">MySQL数据库软件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DDL-操作数据库、表"><span class="nav-text">DDL:操作数据库、表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、操作数据库：CRUD"><span class="nav-text">一、操作数据库：CRUD</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-C-Create-创建"><span class="nav-text">1. C(Create):创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-R-Retrieve-：查询"><span class="nav-text">2. R(Retrieve)：查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-U-Update-修改"><span class="nav-text">3. U(Update):修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-D-Delete-删除"><span class="nav-text">4. D(Delete):删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-使用数据库"><span class="nav-text">5. 使用数据库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、操作表"><span class="nav-text">二、操作表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-C-Create-创建-1"><span class="nav-text">1. C(Create):创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-R-Retrieve-：查询-1"><span class="nav-text">2. R(Retrieve)：查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-U-Update-修改-1"><span class="nav-text">3. U(Update):修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-D-Delete-删除-1"><span class="nav-text">4. D(Delete):删除</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DML：增删改表中数据"><span class="nav-text">DML：增删改表中数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-添加数据："><span class="nav-text">1. 添加数据：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-删除数据："><span class="nav-text">2. 删除数据：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-修改数据："><span class="nav-text">3. 修改数据：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DQL：查询表中的记录"><span class="nav-text">DQL：查询表中的记录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-语法："><span class="nav-text">1. 语法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-基础查询"><span class="nav-text">2. 基础查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-条件查询"><span class="nav-text">3. 条件查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-where子句后跟条件"><span class="nav-text">(1) where子句后跟条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-运算符"><span class="nav-text">(2) 运算符</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DQL-查询语句"><span class="nav-text">DQL:查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-排序查询"><span class="nav-text">1. 排序查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-聚合函数"><span class="nav-text">2. 聚合函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-分组查询"><span class="nav-text">3. 分组查询:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-分页查询"><span class="nav-text">4. 分页查询</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
