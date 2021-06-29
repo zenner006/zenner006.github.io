@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="algorithm,哈希函数,哈希表,布隆过滤器,一致性哈希,并查集," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zenner's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="题目一 认识哈希函数和哈希表哈希函数一、性质  哈希函数的输入域是无限大的； 哈希函数的输出域是有穷尽的； 输入如果一样，输出一定一样； 哈希碰撞：输入不一样，也可能得到输出一样的值；（因为输入域无穷大，输出域有限大，所以必然会产生冲突；) 哈希函数的离散性：也就是输出域每个值被输出的概率都差不多一样大；  二、特征  输出的值和输入没有关系；保证它结果是均匀出现的；  三、找到一千个独立的哈希函">
+<meta property="og:type" content="article">
+<meta property="og:title" content="左神算法-基础课-05">
+<meta property="og:url" content="http://yoursite.com/2020/12/11/zuoshen-basic-class-5/index.html">
+<meta property="og:site_name" content="zenner&#39;s Blog">
+<meta property="og:description" content="题目一 认识哈希函数和哈希表哈希函数一、性质  哈希函数的输入域是无限大的； 哈希函数的输出域是有穷尽的； 输入如果一样，输出一定一样； 哈希碰撞：输入不一样，也可能得到输出一样的值；（因为输入域无穷大，输出域有限大，所以必然会产生冲突；) 哈希函数的离散性：也就是输出域每个值被输出的概率都差不多一样大；  二、特征  输出的值和输入没有关系；保证它结果是均匀出现的；  三、找到一千个独立的哈希函">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201210152321153.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201210153820881.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201210160021986.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201210170417902.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201211162620873.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201211095208875.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201211095510716.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201211100851717.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201211101606972.png">
+<meta property="article:published_time" content="2020-12-11T09:52:44.000Z">
+<meta property="article:modified_time" content="2020-12-11T10:08:24.214Z">
+<meta property="article:tag" content="algorithm">
+<meta property="article:tag" content="哈希函数">
+<meta property="article:tag" content="哈希表">
+<meta property="article:tag" content="布隆过滤器">
+<meta property="article:tag" content="一致性哈希">
+<meta property="article:tag" content="并查集">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/.com//image-20201210152321153.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/12/11/zuoshen-basic-class-5/"/>
+
+
+
+
+
+  <title>左神算法-基础课-05 | zenner's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zenner's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">巨饼的技术博</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/11/zuoshen-basic-class-5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zenner's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">左神算法-基础课-05</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-11T17:52:44+08:00">
+                2020-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/%E5%B7%A6%E7%A5%9E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">左神算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/%E5%B7%A6%E7%A5%9E%E7%AE%97%E6%B3%95/%E5%88%9D%E7%BA%A7/" itemprop="url" rel="index">
+                    <span itemprop="name">初级</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/%E5%B7%A6%E7%A5%9E%E7%AE%97%E6%B3%95/%E5%88%9D%E7%BA%A7/%E5%93%88%E5%B8%8C/" itemprop="url" rel="index">
+                    <span itemprop="name">哈希</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="题目一-认识哈希函数和哈希表"><a href="#题目一-认识哈希函数和哈希表" class="headerlink" title="题目一 认识哈希函数和哈希表"></a>题目一 认识哈希函数和哈希表</h1><h2 id="哈希函数"><a href="#哈希函数" class="headerlink" title="哈希函数"></a>哈希函数</h2><p><strong>一、性质</strong></p>
+<ol>
+<li>哈希函数的输入域是无限大的；</li>
+<li>哈希函数的输出域是有穷尽的；</li>
+<li>输入如果一样，输出一定一样；</li>
+<li><strong>哈希碰撞：</strong>输入不一样，也可能得到输出一样的值；（因为输入域无穷大，输出域有限大，所以必然会产生冲突；)</li>
+<li>哈希函数的离散性：也就是输出域每个值被输出的概率都差不多一样大；</li>
+</ol>
+<p><strong>二、特征</strong></p>
+<ol>
+<li>输出的值和输入没有关系；保证它结果是均匀出现的；</li>
+</ol>
+<p><strong>三、找到一千个独立的哈希函数</strong></p>
+<p>独立的意思在于一个哈希函数不会随着一个的变化而变化；</p>
+<a id="more"></a>
+<p><strong>具体做法</strong>：</p>
+<p>一个哈希函数可以生成16位的十六进制的输出集；他们每个位的码都是相互不关联的；</p>
+<p>那么可以把它前八位作为一个哈希函数$h_1$，后八位做一个哈希函数$h_2$</p>
+<p>紧接着，$h_3 = h_1+1*h_2$ ；这里第三个哈希函数与他们两个是没有关系的；</p>
+<p>以此类推： $h_i=h_1+(i-2)*h_2$ 做出很多很多的哈希函数，并且它们相互之间是相互独立的；</p>
+<p><strong>四、 粗略介绍哈希函数的内部构造</strong></p>
+<p>比如说一个字符串，不管多长，要把它得到一个16位的哈希函数；</p>
+<p>就分割16位16位的异或，再错位异或之类的；</p>
+<p>实现方法有很多；</p>
+<h2 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h2><p>哈希表可以： <code>put(key1, value1)</code>，<code>get(key1)</code>，<code>remote(key1)</code></p>
+<p><strong>一、哈希表的存放</strong></p>
+<p>比方有一个数组大小是 <code>N</code>，进来一个<code>(key, value)</code> ; </p>
+<p>通过计算 <code>key</code>的哈希值，膜上数组的大小 <code>N</code> ;  可以在数组中找到一个存放这个<code>(key, value)</code> 的位置；以节点的形式把它存放在数组中；</p>
+<p>再有值进来冲突了某个位置，就在节点后形成链表的形式；</p>
+<p><strong>二、哈希表的扩容</strong></p>
+<p>某一个位置的链很长了，那么就把它扩容；扩容讲究也很宽泛。可以<strong>成倍扩容</strong>；那么存放N个元素可能就要扩容 $log_2N$次</p>
+<p><strong>离线扩容</strong>：指的是在用的哈希表已经很元素很多了，那么想办法先让访问都在目前的哈希表上访问；然后再后台再扩容的空间里把元素放进来。等做好后就把访问引到这个上面来；它扩容过程不占用线上访问时间；</p>
+<h2 id="哈希函数的一个使用场景"><a href="#哈希函数的一个使用场景" class="headerlink" title="哈希函数的一个使用场景"></a>哈希函数的一个使用场景</h2><p>【面试题】：给你一个大文件，100T，寸的都是数字；把其中所有数字得到一个新文件，保证每个数不重复；</p>
+<p>给1000个机器；为了充分使用这1000个机器，可以用哈希函数来给1000个机器来分流。每从大文件中读书来一个数，就算出它的哈希函数。然后再膜上1000，决定它该由哪个机器处理。这样做有个好处就是相同的数会被分配到同一个机器上去；这样重复的值就可以被找到；</p>
+<p>大数据的题目：就用哈希函数，相同输入导致相同输出。不同输入均匀分布；</p>
+<h1 id="题目二-设计RandomPool结构"><a href="#题目二-设计RandomPool结构" class="headerlink" title="题目二 设计RandomPool结构"></a>题目二 设计RandomPool结构</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>设计一种结构，在该结构中有如下三个功能： </p>
+<ul>
+<li><strong>insert(key)</strong>：将某个key加入到该结构，做到不重复加入。 </li>
+<li><strong>delete(key)</strong>：将原本在结构中的某个key移除。 </li>
+<li><strong>getRandom()</strong>： 等概率随机返回结构中的任何一个key。</li>
+</ul>
+<p>【要求】<code>Insert</code>、<code>delete</code>和<code>getRandom</code>方法的时间复杂度都是 <code>O(1)</code></p>
+<h2 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h2><p>前两个方法是可以考虑用一个哈希表来自然实现的；但是第三个单纯用一个哈希表是得不到的；</p>
+<p>所以这里除了原本的哈希表还需要另外的结构来辅助完成这个功能；</p>
+<ol>
+<li><p>在不考虑delete的情况，仅仅往哈希表里的加入元素：</p>
+<p>我们要知道加入了几个了</p>
+<p>第一个哈希表加入第一个元素<code>(key,value)</code>，另一个哈希表加入（value，key），value表示第几次插入到这个哈希表中；</p>
+<p>我们在第一个哈希表中可以根据key找到它是第几个插入的；在第二个可以通过第几个插入的找到key值；</p>
+<p>str0 —— 0    0 —— str0</p>
+<p>str1 —— 1    1 —— str1</p>
+<p>str2 —— 2    2 —— str2</p>
+<p>strN —— N    N —— strN</p>
+<p>以此类推，加入<code>N</code>个后，可以在 <code>0 ~ N-1</code>之间随机选择一个数在第二个哈希表找到key，再在第二个哈希表中找到相对应的值；这种情况下，可以根据加入元素多少实现等概率返回。</p>
+</li>
+<li><p>删除情况：</p>
+<p>比方要删除 <code>0 ~ N-1</code> 中的某一个数。可以在第一个哈希表中找到它是第几个加入的。相对应的加入的元素数目也减少了；但是在随机的时候就可能随机到 <code>i</code>。另外由于总数变为 <code>N-1</code>了，随机范围是 <code>0 ~ N-2</code>了，所以之前最后一个加入的次序为 <code>N-1</code> 的元素就随机不到了。所以可以用最后一个加入的这个元素补被删除的那个位置。</p>
+<p>另外这里的进入哈希表的次序只不过是一个辅助信息。它在接口中，不对外呈现；所以更改它没有多大影响；</p>
+</li>
+</ol>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Pool</span>&lt;<span class="title">K</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;K, Integer&gt; KeyIndexMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer, K&gt; IndexKeyMap;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Pool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.IndexKeyMap = <span class="keyword">new</span> HashMap&lt;Integer, K&gt;();</span><br><span class="line">        <span class="keyword">this</span>.KeyIndexMap = <span class="keyword">new</span> HashMap&lt;K, Integer&gt;();</span><br><span class="line">        <span class="keyword">this</span>.size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.KeyIndexMap.containsKey(key)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.KeyIndexMap.put(key, size);</span><br><span class="line">            <span class="keyword">this</span>.IndexKeyMap.put(size ++ , key);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"Already exits!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.KeyIndexMap.containsKey(key)) &#123;</span><br><span class="line">            <span class="keyword">int</span> deleteIndex = <span class="keyword">this</span>.KeyIndexMap.get(key);</span><br><span class="line">            <span class="keyword">int</span> lastIndex = --<span class="keyword">this</span>.size;</span><br><span class="line">            K lastKey = <span class="keyword">this</span>.IndexKeyMap.get(lastIndex);</span><br><span class="line">            <span class="keyword">this</span>.KeyIndexMap.put(lastKey, deleteIndex);</span><br><span class="line">            <span class="keyword">this</span>.IndexKeyMap.put(deleteIndex, lastKey);</span><br><span class="line">            <span class="keyword">this</span>.KeyIndexMap.remove(key);</span><br><span class="line">            <span class="keyword">this</span>.IndexKeyMap.remove(lastIndex);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"SomeThing Wrong!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> K <span class="title">getRandom</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.size == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> randomIndex = (<span class="keyword">int</span>) (Math.random() * <span class="keyword">this</span>.size); <span class="comment">// 0 ~ size - 1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.IndexKeyMap.get(randomIndex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>在序列中出现了洞，用最后一个去填是常规操作</strong></p>
+<h1 id="题目三-认识布隆过滤器"><a href="#题目三-认识布隆过滤器" class="headerlink" title="题目三 认识布隆过滤器"></a>题目三 认识布隆过滤器</h1><h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>假设有一个需求：100亿个<strong>url</strong>黑名单；每个url是64字节；使用场景是，给一个 url 如果这个 url 属于黑名单，那就返回 true， 否则返回 false；</p>
+<p>这种场景用哈希表的话就需要把所有的东西加入到内存当中来；这样子所需的内存资源就很多很多。所以就可以用布隆过滤器；</p>
+<p>布隆过滤器有一个缺点：它有一定的失误率（宁可错杀3000不可放过一个；在黑名单的不会弄错，他会返回 True；但是不在黑名单的有一定的概率会搞错。）</p>
+<ol>
+<li><p>布隆过滤器需要先准备一个长比特数组，它的长度为 $m$ ；使用这个长比特数组的目的就在于我们准备用其中某几个 <code>bit</code> 的位置来组合说明某个url是否存在；</p>
+<ul>
+<li>长比特数组的实现</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 一个整数的位数是 32个bit，那么申请的整数数组是 32000 bits</span></span><br><span class="line">    <span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">1000</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">30000</span>;  <span class="comment">// 把第 30000 个位置描黑</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> intIndex = index / <span class="number">32</span>;    <span class="comment">// 它在整数数组里的位置</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> bitIndex = index % <span class="number">32</span>;  <span class="comment">// 在所在的整数里的哪一个 bit 位；</span></span><br><span class="line"></span><br><span class="line">    arr[intIndex] = (arr[intIndex] | (<span class="number">1</span> &lt;&lt; bitIndex));  <span class="comment">// 把arr[intIndex] 这个整数的 第bitIndex位描黑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>针对每个 url 我们把它经过 $k$ 个独立的哈希函数，算出 $k$ 个哈希值，再膜上比特数组的长度 $m$ 得到比特数组的 $k$ 个位置 ；分别在数组上把这 $k$ 个位置给描黑（写上1）；</p>
+</li>
+</ol>
+<ol>
+<li><p>查询：来了一个 url ，用它经过我们之前的 $k$ 个哈希函数，同样的方法求出来 $k$ 个位置；看比特数组中这 $k$ 个位置是否被描黑了；如果都被描黑了，则我们可以认为这个 url 在黑名单里（有可能有失误，碰巧那几个都被涂黑了。）。如果有一个不是黑的，则它绝对不在黑名单了；</p>
+<ul>
+<li><p>所以选择哈希函数的 $k$ 的大小，和比特数组长度 $m$ 来控制失误率；</p>
+<ul>
+<li>$m$ 越大，失误率降低；$m$ 越小，失误率升高；下面是 $m$ 的所需公式 ：$n$ 表示样本量；$p$ 是预期失误率；</li>
+</ul>
+<script type="math/tex; mode=display">
+m = -\frac{n*\ln p}{(\ln 2)^2}</script><ul>
+<li>确定哈希函数个数 $k$ 的个数：这个数是小数需要向上取整<script type="math/tex; mode=display">
+k=\ln 2 * \frac{m}{n}</script></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>当哈希函数个数 $k$ 和样本数 $m$ 确定时（都向上取整了），预期失误率是：<pre><code>$$
+p=(1-e^{-\frac{n*k}{m}})^k
+$$
+</code></pre></li>
+</ul>
+<h1 id="题目四-认识一致性哈希"><a href="#题目四-认识一致性哈希" class="headerlink" title="题目四 认识一致性哈希"></a>题目四 认识一致性哈希</h1><h2 id="场景-1"><a href="#场景-1" class="headerlink" title="场景"></a>场景</h2><p><strong>经典服务器抗压结构</strong>：后端集群有 $N$ 台机器；前端获取请求后根据请求的 $key$ 来得到一个哈希值。 然后在得到这个哈希值除以 $N$ 的余数；根据这个余数把这个请求分配到相对应位置的机器上。这样会使得几台机器得到的请求压力差不多相同。（<strong>负载均衡</strong>）</p>
+<p>但是当需要在这个结构中加机器或者减机器的时候这个结构就需要大范围的改动。因为每一个key的哈希值会根据新的机器数和之前得到的位置是不同的。（<strong>数据归属变化了</strong>）</p>
+<p>这种情况下就可以使用一致性哈希。<strong>它可以把数据迁移代价变得很低，又负载均衡</strong>；</p>
+<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><p><img src="/.com//image-20201210152321153.png" alt="image-20201210152321153"></p>
+<p><strong>实际服务器集群的结构：</strong></p>
+<p><img src="/.com//image-20201210153820881.png" alt="image-20201210153820881"></p>
+<p><strong>此时需要加入新的机器</strong></p>
+<p><img src="/.com//image-20201210160021986.png" alt="image-20201210160021986"></p>
+<h2 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h2><ul>
+<li>在机器数量比较小的时候，他们在哈希值组成的环中的分布不是均分的；使得某个机器可能负载过多；</li>
+<li>即使人为的让他分布均匀，但是再加入新机器时；还是会破环原来的均衡；</li>
+</ul>
+<p>这里我们可以用<strong>虚拟节点技术</strong>来解决这个问题；</p>
+<h2 id="虚拟节点"><a href="#虚拟节点" class="headerlink" title="虚拟节点"></a>虚拟节点</h2><p>每个物理机器不再使用自己的ip信息来分配哈希域的区间</p>
+<p><img src="/.com//image-20201210170417902.png" alt="image-20201210170417902"></p>
+<h1 id="题目五-岛问题"><a href="#题目五-岛问题" class="headerlink" title="题目五 岛问题"></a>题目五 岛问题</h1><h2 id="题目-1"><a href="#题目-1" class="headerlink" title="题目"></a>题目</h2><p>一个矩阵中只有0和1两种值，每个位置都可以和自己的上、下、左、右 四个位置相连，如果有一片连在一起，这个部分叫做一个岛，求一个矩阵中有多少个岛？</p>
+<p>举例： </p>
+<p>0 0 1 0 1 0 </p>
+<p>1 1 1 0 1 0 </p>
+<p>1 0 0 1 0 0 </p>
+<p>0 0 0 0 0 0</p>
+<p>这个矩阵中有三个岛。</p>
+<h2 id="思想-1"><a href="#思想-1" class="headerlink" title="思想"></a>思想</h2><p>单任务的想法：</p>
+<ul>
+<li>遇到岛就深度遍历把遍历过的都给标记起来。之后遇到标记过的，直接跳过，直到遇到未标记的岛，就给岛的数量加一；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">countIslands</span><span class="params">(<span class="keyword">int</span>[][] m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (m == <span class="keyword">null</span> || m[<span class="number">0</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> N = m.length;</span><br><span class="line">    <span class="keyword">int</span> M = m[<span class="number">0</span>].length;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; M; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (m[i][j] == <span class="number">1</span>) &#123;</span><br><span class="line">                res ++;</span><br><span class="line">                infect(m, i, j, N, M);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">infect</span><span class="params">(<span class="keyword">int</span>[][] m, <span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> N, <span class="keyword">int</span> M)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (i &lt; <span class="number">0</span> || i &gt;= N || j &lt; <span class="number">0</span> || j &gt;= M || m[i][j] != <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    m[i][j] = <span class="number">2</span>;</span><br><span class="line">    infect(m, i + <span class="number">1</span>, j, N, M);</span><br><span class="line">    infect(m, i - <span class="number">1</span>, j, N, M);</span><br><span class="line">    infect(m, i, j + <span class="number">1</span>, N, M);</span><br><span class="line">    infect(m, i, j - <span class="number">1</span>, N, M);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>多任务的思想（并行计算）：</p>
+<ul>
+<li>把矩阵分块处理分别数出其中各自有多少岛屿</li>
+<li>然后对矩阵块的边缘进行考虑<ul>
+<li>普遍情况下要对矩阵间的边缘也就是 灰色部分进行考察；两个矩阵边缘相连，在不同情况下是不同的，在下图中两个边缘区域相连，他们总岛屿数 - 1；<img src="/.com//image-20201211162620873.png" alt="image-20201211162620873"></li>
+</ul>
+</li>
+<li>考虑矩阵块边界相连时，把各个矩阵块里找到的岛屿当作并查集；</li>
+<li>搜索边界，如果分属于两个矩阵块里的岛屿（并查集）在边界是相连的但是没有被合并过，那么总岛屿数减一，把他们相连；</li>
+</ul>
+<h1 id="题目六-并查集"><a href="#题目六-并查集" class="headerlink" title="题目六 并查集"></a>题目六 并查集</h1><p>概念好理解，但是比较难的是在什么场合去应用他。</p>
+<h2 id="可应用的地方"><a href="#可应用的地方" class="headerlink" title="可应用的地方"></a>可应用的地方</h2><ul>
+<li>检查两个元素是否属于一个集合： <ul>
+<li><code>isSameSet(A, B)</code> ：</li>
+</ul>
+</li>
+<li>两个元素各自所在的集合合并在一起：<ul>
+<li><code>set union(element A, element B)</code>  </li>
+</ul>
+</li>
+</ul>
+<h2 id="并查集的结构"><a href="#并查集的结构" class="headerlink" title="并查集的结构"></a>并查集的结构</h2><p><strong>并查集的初始化</strong></p>
+<p>初始化时需要把所有的元素都给出；并每个元素都可以被看成是独立的集合；它有一个自旋指向；</p>
+<p>并查集代表一个集合的节点会把指针指向自己；可以通过指针指向自己的节点识别出集合的头。</p>
+<p><img src="/.com//image-20201211095208875.png" alt="image-20201211095208875"></p>
+<p><strong>并查集合并</strong></p>
+<p>两个集合合并时任意的让其中一个集合的代表节点解除自旋指向，指向另一个并查集中的节点：</p>
+<p><strong>一般会让节点数更小的，指向节点多一些的并查集。</strong></p>
+<p><img src="/.com//image-20201211095510716.png" alt="image-20201211095510716"></p>
+<p><strong>检查元素是否在一个集合</strong>：就是找到两个节点一直找到他们所在集合的代表节点，看他们是否是一个节点；</p>
+<h2 id="并查集的优化"><a href="#并查集的优化" class="headerlink" title="并查集的优化"></a>并查集的优化</h2><p><strong>查询后再优化，仅优化查询路径上的节点</strong></p>
+<p>查询 $4$ 节点会路过三个节点，直到找到 $1$ 节点</p>
+<p><img src="/.com//image-20201211100851717.png" alt="image-20201211100851717"></p>
+<p>然后再把这个结构进行优化成这个样子：</p>
+<p><img src="/.com//image-20201211101606972.png" alt="image-20201211101606972"></p>
+<p>至于那些指向 $4$ 或者 $3$ 和 $2$ 的都保持原地不动。仅仅把查询 $4$ 到代表节点的路径扁平化，让它们指向 $1$ 节点；</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="comment">// whatever you like</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFindSet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> HashMap&lt;Node, Node&gt; fatherMap;</span><br><span class="line">    <span class="keyword">public</span> HashMap&lt;Node, Integer&gt; sizeMap;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFindSet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        fatherMap = <span class="keyword">new</span> HashMap&lt;Node, Node&gt;();</span><br><span class="line">        sizeMap = <span class="keyword">new</span> HashMap&lt;Node, Integer&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeSets</span><span class="params">(List&lt;Node&gt; nodes)</span> </span>&#123;</span><br><span class="line">        fatherMap.clear();</span><br><span class="line">        sizeMap.clear();</span><br><span class="line">        <span class="keyword">for</span> (Node node: nodes) &#123;</span><br><span class="line">            fatherMap.put(node, node);</span><br><span class="line">            sizeMap.put(node, <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">findHead</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">        Node father = fatherMap.get(node);</span><br><span class="line">        <span class="keyword">if</span> (father != node) &#123;</span><br><span class="line">            father = findHead(father);</span><br><span class="line">        &#125;</span><br><span class="line">        fatherMap.put(node, father);</span><br><span class="line">        <span class="keyword">return</span> father;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSameSet</span><span class="params">(Node a, Node b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> findHead(a) == findHead(b);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(Node a, Node b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (a == <span class="keyword">null</span> || b == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Node aHead = findHead(a);</span><br><span class="line">        Node bHead = findHead(b);</span><br><span class="line">        <span class="keyword">if</span> (aHead != bHead) &#123;</span><br><span class="line">            <span class="keyword">int</span> aSetSize = sizeMap.get(aHead);</span><br><span class="line">            <span class="keyword">int</span> bSetSIze = sizeMap.get(bHead);</span><br><span class="line">            <span class="keyword">if</span> (aSetSize &lt;= bSetSIze) &#123;</span><br><span class="line">                fatherMap.put(aHead, bHead);</span><br><span class="line">                sizeMap.put(bHead, aSetSize + bSetSIze);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                fatherMap.put(bHead, aHead);</span><br><span class="line">                sizeMap.put(aHead, aSetSize + bSetSIze);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>所有的操作包括：查询过程 + 合并过程 ——&gt; $O(N)$ 及以上，那么平均每次操作都是常数级别，可以说是：$O(1)$</p>
+<h2 id="应用：岛问题"><a href="#应用：岛问题" class="headerlink" title="应用：岛问题"></a>应用：<a href="#题目五 岛问题">岛问题</a></h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/algorithm/" rel="tag"># algorithm</a>
+          
+            <a href="/tags/%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0/" rel="tag"># 哈希函数</a>
+          
+            <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" rel="tag"># 哈希表</a>
+          
+            <a href="/tags/%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/" rel="tag"># 布隆过滤器</a>
+          
+            <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C/" rel="tag"># 一致性哈希</a>
+          
+            <a href="/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/" rel="tag"># 并查集</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/03/zuoshen-basic-class-4/" rel="next" title="左神算法-基础课-04">
+                <i class="fa fa-chevron-left"></i> 左神算法-基础课-04
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/13/Maven-basic-md/" rel="prev" title="Maven基础">
+                Maven基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">Deep ploughing those days ​​​​</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/1956918893" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:juyi006@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://fivelike.xyz/" title="fivelike" target="_blank">fivelike</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.reachdong.cool/" title="ReachDong(dada)" target="_blank">ReachDong(dada)</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题目一-认识哈希函数和哈希表"><span class="nav-text">题目一 认识哈希函数和哈希表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#哈希函数"><span class="nav-text">哈希函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哈希表"><span class="nav-text">哈希表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哈希函数的一个使用场景"><span class="nav-text">哈希函数的一个使用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#题目二-设计RandomPool结构"><span class="nav-text">题目二 设计RandomPool结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思想"><span class="nav-text">思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#题目三-认识布隆过滤器"><span class="nav-text">题目三 认识布隆过滤器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#场景"><span class="nav-text">场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#题目四-认识一致性哈希"><span class="nav-text">题目四 认识一致性哈希</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#场景-1"><span class="nav-text">场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过程"><span class="nav-text">过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺陷"><span class="nav-text">缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟节点"><span class="nav-text">虚拟节点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#题目五-岛问题"><span class="nav-text">题目五 岛问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目-1"><span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思想-1"><span class="nav-text">思想</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#题目六-并查集"><span class="nav-text">题目六 并查集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#可应用的地方"><span class="nav-text">可应用的地方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并查集的结构"><span class="nav-text">并查集的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并查集的优化"><span class="nav-text">并查集的优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间复杂度"><span class="nav-text">时间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用：岛问题"><span class="nav-text">应用：岛问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

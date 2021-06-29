@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="algorithm,排序,冒泡排序,选择排序,插入排序,归并排序,对数器," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zenner's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="排序冒泡排序每次把当前数组最大值通过交换放到最后；时间复杂度：$O(N^2)$ 对这个算法描述分为三个层面 1234宏观： 用end控制前面数组中的最大值存放的位置；它的初始值为N-1，结束值为1；中层： 把0 ~ end里的最大值传递到end位置；微观： 从&#96;0 ~ end-1&#96; 针对于相邻两个元素进行比较（位置0 和 位置1 比较； 然后位置1 和 位置2 比较；直到位置end">
+<meta property="og:type" content="article">
+<meta property="og:title" content="左神算法-基础课-01-笔记">
+<meta property="og:url" content="http://yoursite.com/2020/10/07/zuoshen-basic-class-1/index.html">
+<meta property="og:site_name" content="zenner&#39;s Blog">
+<meta property="og:description" content="排序冒泡排序每次把当前数组最大值通过交换放到最后；时间复杂度：$O(N^2)$ 对这个算法描述分为三个层面 1234宏观： 用end控制前面数组中的最大值存放的位置；它的初始值为N-1，结束值为1；中层： 把0 ~ end里的最大值传递到end位置；微观： 从&#96;0 ~ end-1&#96; 针对于相邻两个元素进行比较（位置0 和 位置1 比较； 然后位置1 和 位置2 比较；直到位置end">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="http://yoursite.com/.com//image-20200927100143765.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20200927100804767.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20200927100836217.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20200927100948115.png">
+<meta property="article:published_time" content="2020-10-07T03:34:15.000Z">
+<meta property="article:modified_time" content="2020-12-11T09:59:47.209Z">
+<meta property="article:tag" content="algorithm">
+<meta property="article:tag" content="排序">
+<meta property="article:tag" content="冒泡排序">
+<meta property="article:tag" content="选择排序">
+<meta property="article:tag" content="插入排序">
+<meta property="article:tag" content="归并排序">
+<meta property="article:tag" content="对数器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/.com//image-20200927100143765.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/10/07/zuoshen-basic-class-1/"/>
+
+
+
+
+
+  <title>左神算法-基础课-01-笔记 | zenner's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zenner's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">巨饼的技术博</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/07/zuoshen-basic-class-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zenner's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">左神算法-基础课-01-笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-07T11:34:15+08:00">
+                2020-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/%E5%B7%A6%E7%A5%9E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">左神算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/%E5%B7%A6%E7%A5%9E%E7%AE%97%E6%B3%95/%E5%88%9D%E7%BA%A7/" itemprop="url" rel="index">
+                    <span itemprop="name">初级</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/%E5%B7%A6%E7%A5%9E%E7%AE%97%E6%B3%95/%E5%88%9D%E7%BA%A7/%E6%8E%92%E5%BA%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">排序</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><p>每次把当前数组最大值通过交换放到最后；时间复杂度：$O(N^2)$</p>
+<p>对这个算法描述分为三个层面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">宏观： 用end控制前面数组中的最大值存放的位置；它的初始值为N-1，结束值为1；</span><br><span class="line">中层： 把0 ~ end里的最大值传递到end位置；</span><br><span class="line">微观： 从&#96;0 ~ end-1&#96; 针对于相邻两个元素进行比较（位置0 和 位置1 比较； 然后位置1 和 位置2 比较；直到位置end-1 和 位置end 比较；）；</span><br><span class="line">	  前面的大于后面的则交换;</span><br></pre></td></tr></table></figure>
+<p>微观层面的算法是对中层的具体实现；中层又是宏观中的一部分；</p>
+<a id="more"></a>
+<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><p><code>0 ~ N-1</code>范围内找到最小的放在 <code>0</code> 位置</p>
+<p><code>1 ~ N-1</code>范围内找到最小的放在 <code>1</code> 位置</p>
+<p><code>2 ~ N-1</code>范围内找到最小的放在 <code>2</code> 位置</p>
+<p>每次找到<code>i ~ N-1</code>位置里的最小值的下标，与<code>i</code>位置进行交换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1： 第 i 位置后的最小值放在 i 位置；于是 i 取值范围为 0 ~ N-2 ； （因为 N - 1 之后没有数了， 也就是它自己了）</span><br><span class="line">2： 需要一个变量 minIndex 来保存最小值的下标；在 i ~ N-1 范围里找最小值；</span><br><span class="line">3： 交换 i 位置上的数和 minIndex 上的数；</span><br></pre></td></tr></table></figure>
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><p><code>0 ~ 0</code>范围内的数只有一个，认为是已排序的；</p>
+<p><code>0 ~ 1</code> 范围里的数，如果判断 <code>1</code> 位置上的数小于  <code>0</code> 位置上数则进行交换， 否则不交换；</p>
+<p><code>0 ~ 2</code> 范围里的数，把 <code>2</code> 位置上的数从后往前依次比较，如果小于则，交换，如果大于则停止；</p>
+<p>从已排序的部分最大值往前比较，如果大与它前一个值就不交换。如果小于则与他前一个值交换。</p>
+<p>差不多已经排序了的数组可以用插入排序。这个和数据状况有关系。完全有序<code>O(N)</code> ；完全逆序就是 <code>O(N^2)</code> ;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1： 变量 i 表示要插入数的位置； i 的范围是 1 ~ N-1</span><br><span class="line">2： 要把 i 位置数插入到 0 ~ i-1 范围里面去；</span><br><span class="line">3： 变量 j 表示要插入值目前的位置： 如果 j 大于 0 且 j 位置上的数小于 j-1 位置上的数， 则交换， j--； 否则停止；</span><br><span class="line">    j 的范围是 1 ~ i</span><br></pre></td></tr></table></figure>
+<p><strong>时间复杂度</strong></p>
+<p>​    最好情况 <code>O(N)</code>    最差情况 <code>O(N^2)</code>    平均情况 <code>O(N)</code> ~  <code>O(N^2)</code></p>
+<p>​    </p>
+<h2 id="对数器"><a href="#对数器" class="headerlink" title="对数器"></a>对数器</h2><h3 id="对数器的作用"><a href="#对数器的作用" class="headerlink" title="对数器的作用"></a>对数器的作用</h3><p><strong>1. 无测试样例时可以用对数器测试代码</strong></p>
+<p><strong>2. 小样本测试过了，但是面对大样本测试出错，可以用对数器帮助修改bug</strong></p>
+<p><strong>3.  如何证明贪心策略是对的？这是很难的。所以用对数器可以试贪心策略是对是错。</strong></p>
+<h3 id="对数器的构成"><a href="#对数器的构成" class="headerlink" title="对数器的构成"></a>对数器的构成</h3><p><strong>1. 产生随机样本的函数</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">	生成随机长度， 随机内容的数组</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] generateRandomArray(<span class="keyword">int</span> size, <span class="keyword">int</span> maxValue)</span><br></pre></td></tr></table></figure>
+<p>  <img src="/.com//image-20200927100143765.png" alt="image-20200927100143765"></p>
+<p><strong>2. 一个绝对正确的方法</strong></p>
+<p>那么这个方法可能是来自于系统提供的；</p>
+<p>或者是自己写的一个绝对正确但是时间复杂度过不了的方法；</p>
+<p><strong>3. 大样本测试</strong></p>
+<p>我们把自动生成的测试样例输入进 <code>绝对正确的方法</code> 和 <code>想要测得方法</code> ； 然后判断他们的输出是否一致；把这个过程重复很多次，可以是很大的值，也就是说可以也许穷尽所有的可能性；</p>
+<p><img src="/.com//image-20200927100804767.png" alt=" "></p>
+<p><img src="/.com//image-20200927100836217.png" alt="image-20200927100836217"></p>
+<p><img src="/.com//image-20200927100948115.png" alt="image-20200927100948115"></p>
+<h3 id="对数器的概念和使用"><a href="#对数器的概念和使用" class="headerlink" title="对数器的概念和使用"></a>对数器的概念和使用</h3><ol>
+<li>有一个你想要测的方法a，</li>
+<li>实现一个绝对正确但是复杂度不好的方法b，</li>
+<li>实现一个随机样本产生器</li>
+<li>实现比对的方法</li>
+<li>把方法a和方法b比对很多次来验证方法a是否正确。</li>
+<li>如果有一个样本使得比对出错，打印样本分析是哪个方法出错；</li>
+<li>当样本数量很多时比对测试依然正确，可以确定方法a已经 正确。</li>
+</ol>
+<h3 id="笔试的时候要准备对数器"><a href="#笔试的时候要准备对数器" class="headerlink" title="笔试的时候要准备对数器"></a>笔试的时候要准备对数器</h3><p>我大概想到要写一个类；然后由各种继承得到；要覆写的东西也是很多；</p>
+<p>python的话，有使输入格式规范的包；</p>
+<h2 id="剖析递归行为和递归行为时间复杂度的估算"><a href="#剖析递归行为和递归行为时间复杂度的估算" class="headerlink" title="剖析递归行为和递归行为时间复杂度的估算"></a>剖析递归行为和递归行为时间复杂度的估算</h2><p><strong>剖析递归行为</strong></p>
+<p>​    把当前运行函数压进系统栈中，保留当前函数的所有信息。调用的函数就在栈顶。</p>
+<p>​    任何递归行为都可以改为非递归；</p>
+<p><strong>递归行为时间复杂度的估算</strong></p>
+<p>​    大部分的递归过程都可以用这个公式来表示</p>
+<script type="math/tex; mode=display">
+T(N) = aT( \frac{N}{b} ) + O(N^d)</script><p>$N$表示样本量，$T(N)$表示时间复杂度；那么这个复杂度分成了$a$个$T(N/b)$个子问题的过程加上一个$O(N^d)$剩余时间过程的时间；</p>
+<p>满足这个公式的递归过程的时间复杂度的计算如下：</p>
+<script type="math/tex; mode=display">
+T(N) = 
+    \begin{cases}
+    O(N^{log_ba}), & {log_ba} > d \\
+    O(N^d*{logN}), & {log_ba} = d \\
+    O(N^d), & {log_ba} < d
+    \end{cases}</script><p>但是像$T(N)=T(\frac{N}{5})+T(\frac{2}{3}N)+O(N^2)$这样的公式就不符合上面的这个过程；</p>
+<p><strong>补充阅读</strong>：<a href="https://blog.gocalf.com/algorithm-complexity-and-master-theorem" target="_blank" rel="noopener">算法的复杂度与 Master 定理</a></p>
+<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><p>把一个数组分为左右两个部分。先把左侧的排好序，再把右侧的排好序。最后用外排的方式排好序。这个过程的时间复杂度是下式：</p>
+<script type="math/tex; mode=display">
+T(N) = 2 *T(\frac{N}{2})+O(N)</script><p>把这个公式带入到上一节，就可以查到它的时间复杂度为 $O(N*logN)$ 。并且归并排序的过程仅仅需要用到一个和原数组长度一样的数组，那么它的空间复杂度为$O(N)$</p>
+<h3 id="归并排序的思想"><a href="#归并排序的思想" class="headerlink" title="归并排序的思想"></a>归并排序的思想</h3><p>针对一个数组将其分为两个部分，分别对这两个部分用归并排序。然后对整个数组进行一个外部排序。</p>
+<p>外部排序：针对有序的两个数组；分别用两个指针指向他们的头部。然后依次往一个辅助数组里填入两个指针中更小的值；直到两个部分都填入了辅助数组后，再把已排序好的填回原数组。</p>
+<h3 id="归并排序的组成部分"><a href="#归并排序的组成部分" class="headerlink" title="归并排序的组成部分"></a>归并排序的组成部分</h3><ol>
+<li><p>主函数用来对整个数组进行排序，它调用第二个组成</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mergeSort</span><span class="params">(<span class="keyword">int</span>[] arr)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    sortProcess(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对未排序的数组<code>L</code>到<code>R</code>部分的排序过程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  如果L==R则范围里只有一个数，那么直接返回就好了。可以认定他是有序的；</span></span><br><span class="line"><span class="comment">  如果有多余一个的数则把它分为前后两部分，分别进行归并排序。然后再对这两部分进行外部排序；</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sortProcess</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>合并<code>L</code>到<code>mid</code> 和 <code>mid+1</code>到<code>R</code>两个排序好的部分：把她两排序整合到一个辅助数组里，然后再拷贝回去；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	外部排序需要：一个辅助数组（大小为：R-L+1），两个指针（分别指向已排序好的两部分的头部），辅助数组下标；</span></span><br><span class="line"><span class="comment">	过程：</span></span><br><span class="line"><span class="comment">		1. 谁小填谁：进行一个循环（两个指针都不超过他们的边界的情况下），谁小就把谁填进辅助数组中；</span></span><br><span class="line"><span class="comment">		2. 谁没了把另一个剩下的全部填入辅助数组中：因为上一个循环已经破除则一定有且只有一个指针越界（因为每次只填入一个数，一次只可能有一个越界）</span></span><br><span class="line"><span class="comment">			所以这里会分别对两个指针进行判断是否到边界。他们是非此即彼的关系，即只会执行一个。</span></span><br><span class="line"><span class="comment">		3. 最后需要把 辅助数组拷贝回 L到R之间的位置；</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> mid, <span class="keyword">int</span> R)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="归并排序的应用：小和问题和逆序对问题"><a href="#归并排序的应用：小和问题和逆序对问题" class="headerlink" title="归并排序的应用：小和问题和逆序对问题"></a>归并排序的应用：小和问题和逆序对问题</h2><h3 id="小和问题"><a href="#小和问题" class="headerlink" title="小和问题"></a>小和问题</h3><p>在一个数组中，每一个数左边比当前数小的数累加起来，叫做这个数组的小和。求一个数组的小和。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">例子</span><br><span class="line"></span><br><span class="line">[1,3,4,2,5] </span><br><span class="line"></span><br><span class="line">1左边比1小的数，没有； </span><br><span class="line"></span><br><span class="line">3左边比3小的数，1； </span><br><span class="line"></span><br><span class="line">4左边比4小的数，1、3； </span><br><span class="line"></span><br><span class="line">2左边比2小的数，1； </span><br><span class="line"></span><br><span class="line">5左边比5小的数，1、3、4、2； </span><br><span class="line"></span><br><span class="line">所以小和为1+1+3+1+1+3+4+2&#x3D;16</span><br></pre></td></tr></table></figure>
+<p><strong>注意这个题不是算一个数之前有多少比它小的个数，而是算比它小的数的和。</strong></p>
+<h4 id="普通思路"><a href="#普通思路" class="headerlink" title="普通思路"></a>普通思路</h4><p>这个笨办法就是进行遍历看这个数之前有几个数比它小；可以把它做对数器；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">comparator</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;</span><br><span class="line">            res += arr[j] &lt; arr[i] ? arr[j] : <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="归并排序的思路"><a href="#归并排序的思路" class="headerlink" title="归并排序的思路"></a>归并排序的思路</h4><pre class="mermaid">graph TD
+A[1,3,4,2,5] --> B[1,3,4]
+B --> D[1,3]
+D --> H[1]
+D --> I[3]
+B --> E[4]
+A --> C[2,5]
+C --> F[2]
+C --> G[5]
+H -->|产生一个小和| J[1,3]
+I -->|数字1*后面长度1| J
+J -->| 数字1*长度1| K[1,3,4]
+E -->| 数字3*长度1| K
+F -->| 数字2*长度1| L[2,5]
+G --> L
+K -->|数字1*长度2 + 不产生小和| M[1,2,3,4,5]
+L -->|数字3*长度1 + 数字4*长度1| M</pre>
+
+
+
+<h4 id="归并排序求小和的组成部分"><a href="#归并排序求小和的组成部分" class="headerlink" title="归并排序求小和的组成部分"></a>归并排序求小和的组成部分</h4><ol>
+<li><p>主函数，主要就是判断输入进来的数组是否符合规定</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">smallSum</span><span class="params">(<span class="keyword">int</span>[] arr)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>归并排序求得数组小范围内的小和</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">mergeSort</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>合并</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> l, <span class="keyword">int</span> m, <span class="keyword">int</span> r)</span></span></span><br></pre></td></tr></table></figure>
+<p>这里代码与归并排序都是一样的不过在比较时多了一句算小和的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">res += arr[p1] &lt; arr[p2] ? arr[p1] * (r - p2 + <span class="number">1</span>) : <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="逆序对问题"><a href="#逆序对问题" class="headerlink" title="逆序对问题"></a>逆序对问题</h3><p>在一个数组中，左边的数如果比右边的数大，则折两个数构成一个逆序对，请打印所有逆序对。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/algorithm/" rel="tag"># algorithm</a>
+          
+            <a href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag"># 排序</a>
+          
+            <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" rel="tag"># 冒泡排序</a>
+          
+            <a href="/tags/%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/" rel="tag"># 选择排序</a>
+          
+            <a href="/tags/%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" rel="tag"># 插入排序</a>
+          
+            <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" rel="tag"># 归并排序</a>
+          
+            <a href="/tags/%E5%AF%B9%E6%95%B0%E5%99%A8/" rel="tag"># 对数器</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/31/python-decorator/" rel="next" title="python装饰器">
+                <i class="fa fa-chevron-left"></i> python装饰器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/10/07/zuoshen-basic-class-1-code/" rel="prev" title="左神算法-基础课-01-代码">
+                左神算法-基础课-01-代码 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">Deep ploughing those days ​​​​</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/1956918893" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:juyi006@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://fivelike.xyz/" title="fivelike" target="_blank">fivelike</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.reachdong.cool/" title="ReachDong(dada)" target="_blank">ReachDong(dada)</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#排序"><span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#冒泡排序"><span class="nav-text">冒泡排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择排序"><span class="nav-text">选择排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序"><span class="nav-text">插入排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对数器"><span class="nav-text">对数器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对数器的作用"><span class="nav-text">对数器的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对数器的构成"><span class="nav-text">对数器的构成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对数器的概念和使用"><span class="nav-text">对数器的概念和使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#笔试的时候要准备对数器"><span class="nav-text">笔试的时候要准备对数器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#剖析递归行为和递归行为时间复杂度的估算"><span class="nav-text">剖析递归行为和递归行为时间复杂度的估算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归并排序"><span class="nav-text">归并排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#归并排序的思想"><span class="nav-text">归并排序的思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#归并排序的组成部分"><span class="nav-text">归并排序的组成部分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归并排序的应用：小和问题和逆序对问题"><span class="nav-text">归并排序的应用：小和问题和逆序对问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小和问题"><span class="nav-text">小和问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通思路"><span class="nav-text">普通思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#归并排序的思路"><span class="nav-text">归并排序的思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#归并排序求小和的组成部分"><span class="nav-text">归并排序求小和的组成部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逆序对问题"><span class="nav-text">逆序对问题</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,python,垃圾回收," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zenner's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Python垃圾回收机制详解一、引用计数Python垃圾回收主要以引用计数为主，分代回收为辅。 1.引用计数增加的情况当发生以下四种情况的时候，该对象的引用计数器+1  对象被创建  a&#x3D;14 对象被引用  b&#x3D;a 对象被作为参数,传到函数中   func(a) 对象作为一个元素，存储在容器中   List&#x3D;{a,”a”,”b”,2}  2. 引用计数减少的情况与上述情况相对应，当发生以下四种情况">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python和java的垃圾回收机制">
+<meta property="og:url" content="http://yoursite.com/2020/08/31/garbage_Collection/index.html">
+<meta property="og:site_name" content="zenner&#39;s Blog">
+<meta property="og:description" content="Python垃圾回收机制详解一、引用计数Python垃圾回收主要以引用计数为主，分代回收为辅。 1.引用计数增加的情况当发生以下四种情况的时候，该对象的引用计数器+1  对象被创建  a&#x3D;14 对象被引用  b&#x3D;a 对象被作为参数,传到函数中   func(a) 对象作为一个元素，存储在容器中   List&#x3D;{a,”a”,”b”,2}  2. 引用计数减少的情况与上述情况相对应，当发生以下四种情况">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="http://yoursite.com/.com//mark-sweep.svg">
+<meta property="og:image" content="http://yoursite.com/.com//141050566294022.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//141048430359736.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//141120037076681.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//141112115351233.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//141332429573819.jpg">
+<meta property="og:image" content="http://yoursite.com/.com//141513122384006.jpg">
+<meta property="article:published_time" content="2020-08-31T02:01:33.000Z">
+<meta property="article:modified_time" content="2020-08-31T02:14:11.643Z">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="垃圾回收">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/.com//mark-sweep.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/08/31/garbage_Collection/"/>
+
+
+
+
+
+  <title>python和java的垃圾回收机制 | zenner's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zenner's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">巨饼的技术博</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/31/garbage_Collection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zenner's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python和java的垃圾回收机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-31T10:01:33+08:00">
+                2020-08-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Python垃圾回收机制详解"><a href="#Python垃圾回收机制详解" class="headerlink" title="Python垃圾回收机制详解"></a><a href="https://blog.csdn.net/xiongchengluo1129/article/details/80462651" target="_blank" rel="noopener">Python垃圾回收机制详解</a></h1><h2 id="一、引用计数"><a href="#一、引用计数" class="headerlink" title="一、引用计数"></a>一、引用计数</h2><p>Python垃圾回收主要以引用计数为主，分代回收为辅。</p>
+<h3 id="1-引用计数增加的情况"><a href="#1-引用计数增加的情况" class="headerlink" title="1.引用计数增加的情况"></a>1.引用计数增加的情况</h3><p>当发生以下四种情况的时候，该对象的引用计数器<strong>+1</strong></p>
+<ol>
+<li><strong>对象被创建  a=14</strong></li>
+<li><strong>对象被引用  b=a</strong></li>
+<li><strong>对象被作为参数,传到函数中   func(a)</strong></li>
+<li><strong>对象作为一个元素，存储在容器中   List={a,”a”,”b”,2}</strong></li>
+</ol>
+<h3 id="2-引用计数减少的情况"><a href="#2-引用计数减少的情况" class="headerlink" title="2. 引用计数减少的情况"></a>2. 引用计数减少的情况</h3><p>与上述情况相对应，当发生以下四种情况时，该对象的引用计数器<strong>-1</strong></p>
+<ol>
+<li><strong>当该对象的别名被显式销毁时  del a</strong></li>
+<li><strong>当该对象的引别名被赋予新的对象，   a=26</strong></li>
+<li><strong>一个对象离开它的作用域，例如 func函数执行完毕时，函数里面的局部变量的引用计数器就会减一（但是全局变量不会）</strong></li>
+<li><strong>将该元素从容器中删除时，或者容器被销毁时。</strong></li>
+</ol>
+<p>当指向该对象的内存的引用计数器为0的时候，该内存将会被Python虚拟机销毁</p>
+<a id="more"></a>
+<h3 id="3-引用计数法有很明显的优点："><a href="#3-引用计数法有很明显的优点：" class="headerlink" title="3.引用计数法有很明显的优点："></a>3.<strong>引用计数法有很明显的优点：</strong></h3><ol>
+<li>高效</li>
+<li>运行期没有停顿 可以类比一下Ruby的垃圾回收机制，也就是 实时性：一旦没有引用，内存就直接释放了。不用像其他机制等到特定时机。实时性还带来一个好处：处理回收内存的时间分摊到了平时。</li>
+<li>对象有确定的生命周期</li>
+<li>易于实现</li>
+</ol>
+<h3 id="4-原始的引用计数法也有明显的缺点："><a href="#4-原始的引用计数法也有明显的缺点：" class="headerlink" title="4. 原始的引用计数法也有明显的缺点："></a>4. 原始的引用计数法也有明显的缺点：</h3><ol>
+<li>维护引用计数消耗资源，维护引用计数的次数和引用赋值成正比，而不像mark and sweep等基本与回收的内存数量有关。</li>
+<li>无法解决循环引用的问题。A和B相互引用而再没有外部引用A与B中的任何一个，它们的引用计数都为1，但显然应该被回收。<br>循环引用的示例：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">list1 &#x3D; []</span><br><span class="line">list2 &#x3D; []</span><br><span class="line">list1.append(list2)</span><br><span class="line">list2.append(list1)</span><br></pre></td></tr></table></figure>
+<h2 id="二、标记-清除"><a href="#二、标记-清除" class="headerlink" title="二、标记-清除"></a>二、标记-清除</h2><p>『标记清除（Mark—Sweep）』算法是一种基于追踪回收（tracing GC）技术实现的垃圾回收算法。它分为两个阶段：第一阶段是标记阶段，GC会把所有的『活动对象』打上标记，第二阶段是把那些没有标记的对象『非活动对象』进行回收。那么GC又是如何判断哪些是活动对象哪些是非活动对象的呢？</p>
+<p>对象之间通过引用（指针）连在一起，构成一个有向图，对象构成这个有向图的节点，而引用关系构成这个有向图的边。从根对象（root object）出发，沿着有向边遍历对象，可达的（reachable）对象标记为活动对象，不可达的对象就是要被清除的非活动对象。根对象就是全局变量、调用栈、寄存器。</p>
+<p><img src="/.com//mark-sweep.svg" alt="laji"></p>
+<p>在上图中，我们把小黑圈视为全局变量，也就是把它作为root object，从小黑圈出发，对象1可直达，那么它将被标记，对象2、3可间接到达也会被标记，而4和5不可达，那么1、2、3就是活动对象，4和5是非活动对象会被GC回收。</p>
+<h2 id="三、分代回收"><a href="#三、分代回收" class="headerlink" title="三、分代回收"></a>三、分代回收</h2><p>分代回收是一种以空间换时间的操作方式，Python将内存根据对象的存活时间划分为不同的集合，每个集合称为一个代，Python将内存分为了3“代”，分别为年轻代（第0代）、中年代（第1代）、老年代（第2代），他们对应的是3个链表，它们的垃圾收集频率与对象的存活时间的增大而减小。新创建的对象都会分配在年轻代，年轻代链表的总数达到上限时，Python垃圾收集机制就会被触发，把那些可以被回收的对象回收掉，而那些不会回收的对象就会被移到中年代去，依此类推，老年代中的对象是存活时间最久的对象，甚至是存活于整个系统的生命周期内。同时，分代回收是建立在标记清除技术基础之上。分代回收同样作为Python的辅助垃圾收集技术处理那些容器对象</p>
+<h1 id="深入理解java垃圾回收机制"><a href="#深入理解java垃圾回收机制" class="headerlink" title="深入理解java垃圾回收机制"></a><a href="https://www.cnblogs.com/sunniest/p/4575144.html" target="_blank" rel="noopener">深入理解java垃圾回收机制</a></h1><h2 id="一、垃圾回收机制的意义"><a href="#一、垃圾回收机制的意义" class="headerlink" title="一、垃圾回收机制的意义"></a>一、垃圾回收机制的意义</h2><p>Java语言中一个显著的特点就是引入了垃圾回收机制，使c++程序员最头疼的内存管理的问题迎刃而解，它使得Java程序员在编写程序的时候不再需要考虑内存管理。由于有个垃圾回收机制，Java中的对象不再有“作用域”的概念，只有对象的引用才有“作用域”。垃圾回收可以有效的防止内存泄露，有效的使用空闲的内存。</p>
+<p>　　<em>ps:内存泄露是指该内存空间使用完毕之后未回收，在不涉及复杂数据结构的一般情况下，Java 的内存泄露表现为一个内存对象的生命周期超出了程序需要它的时间长度，我们有时也将其称为“对象游离”。</em></p>
+<h2 id="二、垃圾回收机制中的算法"><a href="#二、垃圾回收机制中的算法" class="headerlink" title="二、垃圾回收机制中的算法"></a>二、垃圾回收机制中的算法</h2><p>Java语言规范没有明确地说明JVM使用哪种垃圾回收算法，但是任何一种垃圾回收算法一般要做2件基本的事情：（1）发现无用信息对象；（2）回收被无用对象占用的内存空间，使该空间可被程序再次使用。　　</p>
+<h3 id="1-引用计数法-Reference-Counting-Collector"><a href="#1-引用计数法-Reference-Counting-Collector" class="headerlink" title="1.引用计数法(Reference Counting Collector)"></a>1.引用计数法(Reference Counting Collector)</h3><h4 id="1-1算法分析"><a href="#1-1算法分析" class="headerlink" title="1.1算法分析　"></a>1.1算法分析　</h4><p>　　引用计数是垃圾收集器中的早期策略。在这种方法中，堆中每个对象实例都有一个引用计数。当一个对象被创建时，且将该对象实例分配给一个变量，该变量计数设置为1。当任何其它变量被赋值为这个对象的引用时，计数加1（a = b,则b引用的对象实例的计数器+1），但当一个对象实例的某个引用超过了生命周期或者被设置为一个新值时，对象实例的引用计数器减1。任何引用计数器为0的对象实例可以被当作垃圾收集。当一个对象实例被垃圾收集时，它引用的任何对象实例的引用计数器减1。</p>
+<h4 id="1-2优缺点"><a href="#1-2优缺点" class="headerlink" title="1.2优缺点"></a>1.2优缺点</h4><h5 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h5><p>　　引用计数收集器可以很快的执行，交织在程序运行中。对程序需要不被长时间打断的实时环境比较有利。</p>
+<h5 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h5><p>　　无法检测出循环引用。如父对象有一个对子对象的引用，子对象反过来引用父对象。这样，他们的引用计数永远不可能为0.</p>
+<h4 id="1-3引用计数算法无法解决循环引用问题"><a href="#1-3引用计数算法无法解决循环引用问题" class="headerlink" title="1.3引用计数算法无法解决循环引用问题"></a>1.3引用计数算法无法解决循环引用问题</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyObject object1 = <span class="keyword">new</span> MyObject();</span><br><span class="line">        MyObject object2 = <span class="keyword">new</span> MyObject();</span><br><span class="line">         </span><br><span class="line">        object1.object = object2;</span><br><span class="line">        object2.object = object1;</span><br><span class="line">         </span><br><span class="line">        object1 = <span class="keyword">null</span>;</span><br><span class="line">        object2 = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    <span style="color:red">最后面两句将object1和object2赋值为null，也就是说object1和object2指向的对象已经不可能再被访问，但是由于它们互相引用对方，导致它们的引用计数器都不为0，那么垃圾收集器就永远不会回收它们。</span></p>
+<h3 id="2-tracing算法-Tracing-Collector-或-标记-清除算法-mark-and-sweep"><a href="#2-tracing算法-Tracing-Collector-或-标记-清除算法-mark-and-sweep" class="headerlink" title="2. tracing算法(Tracing Collector) 或 标记-清除算法(mark and sweep)"></a>2. tracing算法(Tracing Collector) 或 标记-清除算法(mark and sweep)</h3><h4 id="2-1-根搜索算法"><a href="#2-1-根搜索算法" class="headerlink" title="2.1 根搜索算法"></a>2.1 根搜索算法</h4><p><img src="/.com//141050566294022.jpg" alt="img"></p>
+<p>　根搜索算法是从离散数学中的图论引入的，程序把所有的引用关系看作一张图，从一个节点GC ROOT开始，寻找对应的引用节点，找到这个节点以后，继续寻找这个节点的引用节点，当所有的引用节点寻找完毕之后，剩余的节点则被认为是没有被引用到的节点，即无用的节点。</p>
+<p>java中可作为GC Root的对象有</p>
+<div style="color:red">
+    1.虚拟机栈中引用的对象（本地变量表）<br>
+    2.方法区中静态属性引用的对象<br>
+    3. 方法区中常量引用的对象<br>
+    4.本地方法栈中引用的对象（Native对象）<br>
+　</div>
+
+
+
+<h4 id="2-2-tracing算法的示意图"><a href="#2-2-tracing算法的示意图" class="headerlink" title="2.2 tracing算法的示意图"></a>2.2 tracing算法的示意图</h4><p><img src="/.com//141048430359736.jpg" alt="img"></p>
+<h4 id="2-3标记-清除算法分析"><a href="#2-3标记-清除算法分析" class="headerlink" title="2.3标记-清除算法分析"></a>2.3标记-清除算法分析</h4><p>标记-清除算法采用从根集合进行扫描，对存活的对象对象标记，标记完毕后，再扫描整个空间中未被标记的对象，进行回收，如上图所示。标记-清除算法不需要进行对象的移动，并且仅对不存活的对象进行处理，在存活对象比较多的情况下极为高效，但由于标记-清除算法直接回收不存活的对象，因此会造成内存碎片。</p>
+<h3 id="3-compacting算法-或-标记-整理算法"><a href="#3-compacting算法-或-标记-整理算法" class="headerlink" title="3.compacting算法 或 标记-整理算法"></a>3.compacting算法 或 标记-整理算法</h3><p><img src="/.com//141120037076681.jpg" alt="img"></p>
+<p>标记-整理算法采用标记-清除算法一样的方式进行对象的标记，但在清除时不同，在回收不存活的对象占用的空间后，会将所有的存活对象往左端空闲空间移动，并更新对应的指针。标记-整理算法是在标记-清除算法的基础上，又进行了对象的移动，因此成本更高，但是却解决了内存碎片的问题。在基于Compacting算法的收集器的实现中，一般增加句柄和句柄表。</p>
+<h3 id="4-copying算法-Compacting-Collector"><a href="#4-copying算法-Compacting-Collector" class="headerlink" title="4.copying算法(Compacting Collector)"></a>4.copying算法(Compacting Collector)</h3><p><img src="/.com//141112115351233.jpg" alt="img"></p>
+<p>　该算法的提出是为了克服句柄的开销和解决堆碎片的垃圾回收。</p>
+<p>它开始时把堆分成 一个对象 面和多个空闲面， 程序从对象面为对象分配空间，当对象满了，基于copying算法的垃圾 收集就从根集中扫描活动对象，并将每个 活动对象复制到空闲面(使得活动对象所占的内存之间没有空闲洞)，这样空闲面变成了对象面，原来的对象面变成了空闲面，程序会在新的对象面中分配内存。</p>
+<p>一种典型的基于coping算法的垃圾回收是stop-and-copy算法，它将堆分成对象面和空闲区域面，在对象面与空闲区域面的切换过程中，程序暂停执行。</p>
+<h3 id="5-generation算法-Generational-Collector"><a href="#5-generation算法-Generational-Collector" class="headerlink" title="5.generation算法(Generational Collector)"></a>5.generation算法(Generational Collector)</h3><p><img src="/.com//141332429573819.jpg" alt="img"></p>
+<p>分代的垃圾回收策略，是基于这样一个事实：<strong>不同的对象的生命周期是不一样的</strong>。因此，不同生命周期的对象可以采取不同的回收算法，以便提高回收效率。</p>
+<p><span style="color:red"><strong>年轻代（Young Generation）</strong></span></p>
+<ol>
+<li>所有新生成的对象首先都是放在年轻代的。年轻代的目标就是尽可能快速的收集掉那些生命周期短的对象。</li>
+<li>新生代内存按照8:1:1的比例分为一个eden区和两个survivor(survivor0,survivor1)区。一个Eden区，两个 Survivor区(一般而言)。大部分对象在Eden区中生成。回收时先将eden区存活对象复制到一个survivor0区，然后清空eden区，当这个survivor0区也存放满了时，则将eden区和survivor0区存活对象复制到另一个survivor1区，然后清空eden和这个survivor0区，此时survivor0区是空的，然后将survivor0区和survivor1区交换，即保持survivor1区为空， 如此往复。</li>
+<li>当survivor1区不足以存放 eden和survivor0的存活对象时，就将存活对象直接存放到老年代。若是老年代也满了就会触发一次Full GC，也就是新生代、老年代都进行回收</li>
+<li>新生代发生的GC也叫做Minor GC，MinorGC发生频率比较高(不一定等Eden区满了才触发)</li>
+</ol>
+<p><span style="color:red"><strong>年老代（Old Generation）</strong></span></p>
+<p>1.在年轻代中经历了N次垃圾回收后仍然存活的对象，就会被放到年老代中。因此，可以认为年老代中存放的都是一些生命周期较长的对象。</p>
+<p>2.内存比新生代也大很多(大概比例是1:2)，当老年代内存满时触发Major GC即Full GC，Full GC发生频率比较低，老年代对象存活时间比较长，存活率标记高。</p>
+<p><span style="color:red"><strong>持久代（Permanent Generation）</strong></span></p>
+<p>​    用于存放静态文件，如Java类、方法等。持久代对垃圾回收没有显著影响，但是有些应用可能动态生成或者调用一些class，例如Hibernate 等，在这种时候需要设置一个比较大的持久代空间来存放这些运行过程中新增的类。</p>
+<h2 id="三-GC（垃圾收集器）"><a href="#三-GC（垃圾收集器）" class="headerlink" title="三.GC（垃圾收集器）"></a>三.GC（垃圾收集器）</h2><p>新生代收集器使用的收集器：Serial、PraNew、Parallel Scavenge</p>
+<p>老年代收集器使用的收集器：Serial Old、Parallel Old、CMS</p>
+<p><img src="/.com//141513122384006.jpg" alt="img"></p>
+<p><span style="color:red"><strong>Serial收集器（复制算法)</strong></span></p>
+<p>新生代单线程收集器，标记和清理都是单线程，优点是简单高效。</p>
+<p><span style="color:red"><strong>Serial Old收集器(标记-整理算法)</strong></span></p>
+<p>老年代单线程收集器，Serial收集器的老年代版本。</p>
+<p><span style="color:red"><strong>ParNew收集器(停止-复制算法)</strong></span></p>
+<p>新生代收集器，可以认为是Serial收集器的多线程版本,在多核CPU环境下有着比Serial更好的表现。</p>
+<p><span style="color:red"><strong>Parallel Scavenge收集器(停止-复制算法)</strong></span></p>
+<p>并行收集器，追求高吞吐量，高效利用CPU。吞吐量一般为99%， 吞吐量= 用户线程时间/(用户线程时间+GC线程时间)。适合后台应用等对交互相应要求不高的场景。</p>
+<p><span style="color:red"><strong>Parallel Old收集器(停止-复制算法)</strong></span></p>
+<p>Parallel Scavenge收集器的老年代版本，并行收集器，吞吐量优先</p>
+<p><span style="color:red"><strong>CMS(Concurrent Mark Sweep)收集器（标记-清理算法）</strong></span></p>
+<p>高并发、低停顿，追求最短GC回收停顿时间，cpu占用比较高，响应时间快，停顿时间短，多核cpu 追求高响应时间的选择</p>
+<h2 id="四、GC的执行机制"><a href="#四、GC的执行机制" class="headerlink" title="四、GC的执行机制"></a>四、GC的执行机制</h2><p>由于对象进行了分代处理，因此垃圾回收区域、时间也不一样。GC有两种类型：<span style="color:red">Scavenge GC</span>和<span style="color:red">Full GC</span>。</p>
+<p><span style="color:red"><strong>Scavenge GC</strong></span></p>
+<p>   一般情况下，当新对象生成，并且在Eden申请空间失败时，就会触发Scavenge GC，对Eden区域进行GC，清除非存活对象，并且把尚且存活的对象移动到Survivor区。然后整理Survivor的两个区。这种方式的GC是对年轻代的Eden区进行，不会影响到年老代。因为大部分对象都是从Eden区开始的，同时Eden区不会分配的很大，所以Eden区的GC会频繁进行。因而，一般在这里需要使用速度快、效率高的算法，使Eden去能尽快空闲出来。</p>
+<p><span style="color:red"><strong>Full GC</strong></span></p>
+<p>   对整个堆进行整理，包括Young、Tenured和Perm。Full GC因为需要对整个堆进行回收，所以比Scavenge GC要慢，因此应该尽可能减少Full GC的次数。在对JVM调优的过程中，很大一部分工作就是对于FullGC的调节。有如下原因可能导致Full GC：</p>
+<pre><code>&lt;div style=color:red&gt;
+    1.年老代（Tenured）被写满&lt;br&gt;
+    2.持久代（Perm）被写满 &lt;br&gt;
+    3.System.gc()被显示调用 &lt;br&gt;
+    4.上一次GC之后Heap的各域分配策略动态变化
+ &lt;/div&gt;
+</code></pre><h2 id="五、Java有了GC同样会出现内存泄露问题"><a href="#五、Java有了GC同样会出现内存泄露问题" class="headerlink" title="五、Java有了GC同样会出现内存泄露问题"></a>五、Java有了GC同样会出现内存泄露问题</h2><p><span style="color:red">1. 静态集合类像HashMap、Vector等的使用最容易出现内存泄露，这些静态变量的生命周期和应用程序一致，所有的对象Object也不能被释放，因为他们也将一直被Vector等应用着。</span></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Static Vector v &#x3D; new Vector(); </span><br><span class="line">for (int i &#x3D; 1; i&lt;100; i++) </span><br><span class="line">&#123; </span><br><span class="line">    Object o &#x3D; new Object(); </span><br><span class="line">    v.add(o); </span><br><span class="line">    o &#x3D; null; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　在这个例子中，代码栈中存在Vector 对象的引用 v 和 Object 对象的引用 o 。在 For 循环中，我们不断的生成新的对象，然后将其添加到 Vector 对象中，之后将 o 引用置空。问题是当 o 引用被置空后，如果发生 GC，我们创建的 Object 对象是否能够被 GC 回收呢？答案是否定的。因为， GC 在跟踪代码栈中的引用时，会发现 v 引用，而继续往下跟踪，就会发现 v 引用指向的内存空间中又存在指向 Object 对象的引用。也就是说尽管o 引用已经被置空，但是 Object 对象仍然存在其他的引用，是可以被访问到的，所以 GC 无法将其释放掉。如果在此循环之后， Object 对象对程序已经没有任何作用，那么我们就认为此 Java 程序发生了内存泄漏。</p>
+<p><span style="color:red">2. 各种连接，数据库连接，网络连接，IO连接等没有显示调用close关闭，不被GC回收导致内存泄露。</span></p>
+<p><span style="color:red">3. 监听器的使用，在释放对象的同时没有相应删除监听器的时候也可能导致内存泄露。</span></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag"># 垃圾回收</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/31/python_GIL/" rel="next" title="python中的锁">
+                <i class="fa fa-chevron-left"></i> python中的锁
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/31/python-closure/" rel="prev" title="python闭包">
+                python闭包 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">Deep ploughing those days ​​​​</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/1956918893" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:juyi006@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://fivelike.xyz/" title="fivelike" target="_blank">fivelike</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.reachdong.cool/" title="ReachDong(dada)" target="_blank">ReachDong(dada)</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python垃圾回收机制详解"><span class="nav-text">Python垃圾回收机制详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、引用计数"><span class="nav-text">一、引用计数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-引用计数增加的情况"><span class="nav-text">1.引用计数增加的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-引用计数减少的情况"><span class="nav-text">2. 引用计数减少的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-引用计数法有很明显的优点："><span class="nav-text">3.引用计数法有很明显的优点：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-原始的引用计数法也有明显的缺点："><span class="nav-text">4. 原始的引用计数法也有明显的缺点：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、标记-清除"><span class="nav-text">二、标记-清除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、分代回收"><span class="nav-text">三、分代回收</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入理解java垃圾回收机制"><span class="nav-text">深入理解java垃圾回收机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、垃圾回收机制的意义"><span class="nav-text">一、垃圾回收机制的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、垃圾回收机制中的算法"><span class="nav-text">二、垃圾回收机制中的算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-引用计数法-Reference-Counting-Collector"><span class="nav-text">1.引用计数法(Reference Counting Collector)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1算法分析"><span class="nav-text">1.1算法分析　</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2优缺点"><span class="nav-text">1.2优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#优点："><span class="nav-text">优点：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#缺点："><span class="nav-text">缺点：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3引用计数算法无法解决循环引用问题"><span class="nav-text">1.3引用计数算法无法解决循环引用问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-tracing算法-Tracing-Collector-或-标记-清除算法-mark-and-sweep"><span class="nav-text">2. tracing算法(Tracing Collector) 或 标记-清除算法(mark and sweep)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-根搜索算法"><span class="nav-text">2.1 根搜索算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-tracing算法的示意图"><span class="nav-text">2.2 tracing算法的示意图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3标记-清除算法分析"><span class="nav-text">2.3标记-清除算法分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-compacting算法-或-标记-整理算法"><span class="nav-text">3.compacting算法 或 标记-整理算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-copying算法-Compacting-Collector"><span class="nav-text">4.copying算法(Compacting Collector)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-generation算法-Generational-Collector"><span class="nav-text">5.generation算法(Generational Collector)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-GC（垃圾收集器）"><span class="nav-text">三.GC（垃圾收集器）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、GC的执行机制"><span class="nav-text">四、GC的执行机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、Java有了GC同样会出现内存泄露问题"><span class="nav-text">五、Java有了GC同样会出现内存泄露问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

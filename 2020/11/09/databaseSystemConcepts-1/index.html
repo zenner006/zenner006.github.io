@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据库," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zenner's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="1.2 数据库系统的目标文件处理系统中存储组织信息的主要弊端包括：  数据的冗余和不一致 数据访问困难 数据孤立 完整性问题 原子性问题 并发访问异常 安全性问题  1.3 数据视图​    数据库系统的一个主要目的是给用户提供数据的抽象视图，就是说，系统隐藏关于数据存储和维护的某些细节； 1.3.1 数据抽象 系统要能高效地检索数据。而这促使设计者再数据库中使用复杂的数据结构来表示数据； 许多用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第一章 引言">
+<meta property="og:url" content="http://yoursite.com/2020/11/09/databaseSystemConcepts-1/index.html">
+<meta property="og:site_name" content="zenner&#39;s Blog">
+<meta property="og:description" content="1.2 数据库系统的目标文件处理系统中存储组织信息的主要弊端包括：  数据的冗余和不一致 数据访问困难 数据孤立 完整性问题 原子性问题 并发访问异常 安全性问题  1.3 数据视图​    数据库系统的一个主要目的是给用户提供数据的抽象视图，就是说，系统隐藏关于数据存储和维护的某些细节； 1.3.1 数据抽象 系统要能高效地检索数据。而这促使设计者再数据库中使用复杂的数据结构来表示数据； 许多用">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201109160321098.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201116112941078.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201118102051536.png">
+<meta property="og:image" content="http://yoursite.com/.com//image-20201118103122320.png">
+<meta property="article:published_time" content="2020-11-09T03:17:44.000Z">
+<meta property="article:modified_time" content="2020-11-25T09:43:33.246Z">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/.com//image-20201109160321098.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/11/09/databaseSystemConcepts-1/"/>
+
+
+
+
+
+  <title>第一章 引言 | zenner's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zenner's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">巨饼的技术博</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/09/databaseSystemConcepts-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zenner's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">第一章 引言</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-09T11:17:44+08:00">
+                2020-11-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库系统概念</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-2-数据库系统的目标"><a href="#1-2-数据库系统的目标" class="headerlink" title="1.2 数据库系统的目标"></a>1.2 数据库系统的目标</h1><p>文件处理系统中存储组织信息的主要弊端包括：</p>
+<ul>
+<li>数据的冗余和不一致</li>
+<li>数据访问困难</li>
+<li>数据孤立</li>
+<li>完整性问题</li>
+<li>原子性问题</li>
+<li>并发访问异常</li>
+<li>安全性问题</li>
+</ul>
+<h1 id="1-3-数据视图"><a href="#1-3-数据视图" class="headerlink" title="1.3 数据视图"></a>1.3 数据视图</h1><p>​    数据库系统的一个主要目的是给用户提供数据的抽象视图，就是说，系统隐藏关于数据存储和维护的某些细节；</p>
+<h2 id="1-3-1-数据抽象"><a href="#1-3-1-数据抽象" class="headerlink" title="1.3.1 数据抽象"></a>1.3.1 数据抽象</h2><p><img src="/.com//image-20201109160321098.png" alt="image-20201109160321098"></p>
+<p>系统要能高效地检索数据。而这促使设计者再数据库中使用复杂的数据结构来表示数据；</p>
+<p>许多用户不懂计算机，需要系统开发人员通过如下几个层次对用户屏蔽复杂性：</p>
+<a id="more"></a>
+<ul>
+<li><p>物理层：最低层次的抽象，描述数据实际上是怎样存储的。</p>
+<p>​    详细描述复杂的底层数据结构；</p>
+</li>
+<li><p>逻辑层：比物理层稍高一层。描述数据库存储什么数据，及数据间存在什么关系。</p>
+<ul>
+<li>虽然逻辑层的简单结的实现可能涉及复杂的物理层结构。但逻辑层用户不必知道这样的复杂性；这叫做<strong>物理独立性</strong></li>
+<li>数据库管理员使用抽象的逻辑层。</li>
+</ul>
+</li>
+<li><p>视图层：最高层，只描述数据库的某个部分；</p>
+<ul>
+<li>大型数据库信息的多样性使得其仍存在一定程度的复杂性；</li>
+<li>数据库系统的很多用户并不关心所有的信息，只需要访问数据库的一部分；</li>
+<li>视图层的定义正是为了使用户和系统交互更简单。</li>
+<li>系统可以为同一数据库提供多个视图；</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-3-2-实例和模式"><a href="#1-3-2-实例和模式" class="headerlink" title="1.3.2 实例和模式"></a>1.3.2 实例和模式</h2><p>存储在数据库中的信息的集合称作数据库的一个 <strong>实例</strong> 。而数据库的总体设计称作数据库<strong>模式</strong>（schema）；</p>
+<p>不同的抽象层次，数据库系统可以分为几种不同的模式：<strong>物理模式</strong>在物理层描述数据库的设计、而<strong>逻辑模式</strong>则在逻辑层描述数据库的设计。数据库在视图层可以有几种模式，成为 <strong>子模式</strong>；</p>
+<p><strong>物理数据独立性</strong>：物理层可以在应用程序（视图层）丝毫不受影响的情况下被轻易地改变；应用程序不依赖于物理模式；</p>
+<h2 id="1-3-3-数据模型"><a href="#1-3-3-数据模型" class="headerlink" title="1.3.3 数据模型"></a>1.3.3 数据模型</h2><p>数据库结构的基础是<strong>数据模型</strong>；</p>
+<p>数据模型是一个描述数据、数据联系、数据语义以及一致性约束的概念工具的集合。</p>
+<p>数据模型可被划分为四类：</p>
+<ul>
+<li><strong>关系模型</strong>（relational model）：关系模型用<strong>表的集合</strong>来表示数据和数据间的联系；</li>
+<li><strong>实体-联系模型</strong>（entity-relationship model）：实体-联系（E-R）数据模型基于对现实世界的这样一种认识：现实世界由一组称为实体的基本对象以及这些对象间的联系构成；</li>
+<li><strong>基于对象的数据模型</strong>（object-based data model）：面对对象的数据模型可以看成是E-R模型增加了封装、方法（函数）和对象标识等概念后的扩展；</li>
+<li><strong>半结构化数据模型</strong>：半结构化数据模型允许那些相同类型的数据项含有不同的属性集的数据定义。<strong>可扩展标记语言</strong>被广泛地用来表示半结构化数据；</li>
+</ul>
+<h1 id="1-4-数据库语言"><a href="#1-4-数据库语言" class="headerlink" title="1.4 数据库语言"></a>1.4 数据库语言</h1><p><strong>数据库定义语言</strong>，<strong>数据库操纵语言</strong>；（不限于关系型数据库）</p>
+<h2 id="1-4-1-数据操纵语言"><a href="#1-4-1-数据操纵语言" class="headerlink" title="1.4.1 数据操纵语言"></a>1.4.1 数据操纵语言</h2><p>要实现：增删改查</p>
+<p>有两类基本的数据操纵语言：</p>
+<ul>
+<li><strong>过程化DML</strong>：要求用户指定需要什么数据以及如何获得这些数据；</li>
+<li><strong>声明式DML</strong>：只要求用户指定需要什么数据，不知名如何获得这些数据；</li>
+</ul>
+<h2 id="1-4-2-数据定义语言"><a href="#1-4-2-数据定义语言" class="headerlink" title="1.4.2 数据定义语言"></a>1.4.2 数据定义语言</h2><p><strong>数据存储和定义语言</strong>规定了数据库系统所使用地存储结构和访问方式；这些语句定义了数据库模式的实现细节，而这些细节对用户来说通常不可见；</p>
+<p>存储在数据库的数据值必须满足某些<strong>一致性约束</strong>。约束可以是关于数据库的任意谓词；测试任意谓词的代价比较高。因此数据库系统要以最小代价测试的完整性约束；</p>
+<ul>
+<li><strong>域约束</strong>（domain constraint）：每个属性都必须对应于一个所有可能的取值构成的域；声明一种属性属于某种具体的域就相当于约束它可以取的值。域约束是完整性约束的最基本形式；</li>
+<li><strong>参照完整性</strong>（referential integrity）：一个关系中给定属性集上的取值也在另一关系的某一属性集的取值中出现；当参照完整性约束被违反时，通常的处理是拒绝执行导致完整性被破坏的操作；</li>
+<li><strong>断言</strong>（assertion）：一个断言就是数据库需要时刻满足的某一条件；<ul>
+<li>可以定义涉及多个表或聚集操作的比较复杂的完整性约束。断言创建以后，任何对断言中所涉及关系的操作都会触发关系数据库管理系统对断言的检查，任何使断言不为真值的操作都会被拒绝执行。</li>
+</ul>
+</li>
+<li><strong>授权</strong>（authorization）：对不同的用户在数据库中的不同数据值上允许不同的访问类型。<ul>
+<li>这些区别以 <strong>授权</strong> 来表达：<ul>
+<li><strong>读授权</strong>：允许读不允许修改；</li>
+<li><strong>插入授权</strong>：允许插入新数据，不允许修改已有数据；</li>
+<li><strong>更新授权</strong>：</li>
+<li><strong>删除授权</strong>：</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>DDL的输出放在数据字典中，数据字典包含了<strong>元数据</strong>；元数据是关于数据的数据；可以把数据字典看成之恩那个有数据库系统本身来访问和修改的特殊表；</p>
+<h1 id="1-5-关系数据库"><a href="#1-5-关系数据库" class="headerlink" title="1.5 关系数据库"></a>1.5 关系数据库</h1><h2 id="1-5-1-表"><a href="#1-5-1-表" class="headerlink" title="1.5.1 表"></a>1.5.1 表</h2><p>关系模型是基于记录的模型的一个实例。基于记录的模型是因为数据库的结构是几种固定格式的记录。每个表包含一种特定类型的记录。每个记录类型定义固定数目的字段或属性。表的列对应记录类型的属性；</p>
+<p>在关系模型中可能创建一些有问题的模式，比如出现不必要的冗余信息；</p>
+<h2 id="1-5-2-数据操纵语言"><a href="#1-5-2-数据操纵语言" class="headerlink" title="1.5.2 数据操纵语言"></a>1.5.2 数据操纵语言</h2><p>SQL语言是非过程的；</p>
+<h2 id="1-5-3-数据定义语言"><a href="#1-5-3-数据定义语言" class="headerlink" title="1.5.3 数据定义语言"></a>1.5.3 数据定义语言</h2><p>SQL提供了丰富的DDL，通过它可以定义表、完整性约束、断言等；</p>
+<h2 id="1-5-4-来自应用程序的数据库访问"><a href="#1-5-4-来自应用程序的数据库访问" class="headerlink" title="1.5.4 来自应用程序的数据库访问"></a>1.5.4 来自应用程序的数据库访问</h2><ul>
+<li>通过提供应用程序接口，它可以用来将 DML 和 DDL 的语句发送给数据库，再取回结果。（ODBC、JDBC等）</li>
+<li>通过扩展宿主语言的语法，在宿主语言中嵌入DML调用。通常用一个特殊字符作为DML调用的开始，并且通过预处理器，称为<strong>DML预编译器</strong>，来将DML语句转变成宿主语言中的过程调用；</li>
+</ul>
+<h1 id="1-6-数据库设计"><a href="#1-6-数据库设计" class="headerlink" title="1.6 数据库设计"></a>1.6 数据库设计</h1><p>数据库设计的主要内容是数据库模式的设计；</p>
+<h2 id="1-6-1-设计过程"><a href="#1-6-1-设计过程" class="headerlink" title="1.6.1 设计过程"></a>1.6.1 设计过程</h2><ol>
+<li><p>数据库设计初始阶段是全面刻画预期的数据库用户的数据需求；这阶段的成果是制定出用户需求的规格文档；</p>
+</li>
+<li><p>下一步，设计者选择一个数据模型，并运用该选定的数据模型的概念把那些需求转换成一个数据库的概念模式。在 <strong>概念设计</strong> 阶段开发出来的模式提供了企业的详细概述。</p>
+<ul>
+<li>确保所有数据需求都满足并且相互之间没有冲突；也可去掉一些冗余特性；</li>
+</ul>
+</li>
+<li><p>从关系模型的角度来看，概念设计阶段设计决定数据库中应该包括哪些属性（商业决策），以及如何将这些属性组织到多个表中（计算机科学问题）。</p>
+<ul>
+<li>解决问题的主要方法：<ul>
+<li>使用<strong>实体-联系模型</strong></li>
+<li>引入一套算法(称为规范化)，这套算法将所有属性集作为输入，生成一组关系表；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>一个开发完全的概念模式还将指出企业的功能需求。在 <strong>功能需求说明</strong> 中，用户描述数据之上的各种操作。</p>
+</li>
+<li>最后两个阶段<ul>
+<li><strong>逻辑设计阶段</strong> ：设计者将高层的概念模式映射到要使用的数据库系统的实现数据模式上；</li>
+<li><strong>物理设计阶段</strong> ：这阶段指定数据库的物理特性，特性包括文件组织的形式以及内部的存储结构；</li>
+</ul>
+</li>
+</ol>
+<h2 id="1-6-2-大学机构的数据库设计"><a href="#1-6-2-大学机构的数据库设计" class="headerlink" title="1.6.2 大学机构的数据库设计"></a>1.6.2 大学机构的数据库设计</h2><h2 id="1-6-3-实体-联系模型"><a href="#1-6-3-实体-联系模型" class="headerlink" title="1.6.3 实体-联系模型"></a>1.6.3 实体-联系模型</h2><p>实体-联系（E-R）数据模型使用一组称作实体的基本对象，以及这些对象间的联系。</p>
+<blockquote>
+<p><strong>实体</strong>是现实世界中可区别于其他对象的一件”事情“或一个”物体“。</p>
+<p>数据库中实体通过属性集合来描述</p>
+<p><strong>联系</strong> 是几个实体之间的关联。</p>
+<p>同一类型的所有实体称为<strong>实体集</strong>。</p>
+<p>同一类型的所有联系称为联系集。</p>
+</blockquote>
+<p>数据库的总体逻辑结构可以用实体-联系图来表示：</p>
+<ul>
+<li>实体集用矩形框表示，实体名在头部，属性名在下面；</li>
+<li>联系集用联系一对相关的实体集的菱形表示，联系名放在菱形内部。</li>
+</ul>
+<p><img src="/.com//image-20201116112941078.png" alt="image-20201116112941078"></p>
+<p>除了实体和联系外，E-R模型还描述了数据库必须描述的对其内容的某些约束。</p>
+<h2 id="1-6-4-规范化"><a href="#1-6-4-规范化" class="headerlink" title="1.6.4 规范化"></a>1.6.4 规范化</h2><p><strong>规范化</strong>的目标是生成一个关系模式集合，使存储信息时没有不必要的冗余，同时又能很轻易地检索数据；</p>
+<p>规范化是设计一种符合适当的范式的模式；最常用的方法是使用<strong>函数依赖</strong></p>
+<p>不好的设计可能会包括如下特性：</p>
+<ul>
+<li><strong>信息重复</strong> ：重复信息的修改也是个问题</li>
+<li><strong>缺乏表达某些信息的能力</strong> </li>
+</ul>
+<h1 id="1-7-数据存储和查询"><a href="#1-7-数据存储和查询" class="headerlink" title="1.7 数据存储和查询"></a>1.7 数据存储和查询</h1><p>数据库系统功能部件大致可分为 <strong>存储管理器</strong> 和 <strong>存储处理</strong>部件 ； </p>
+<p><strong>存储管理</strong>：要在大量存储空间组织数据，使其满足和主存之间数据的移动最小化；</p>
+<p><strong>查询处理</strong>：帮助数据库系统简化和方便数据的访问。使得用户获得高性能，同时在视图的层次上工作。不必了解系统实现物理层次细节的负担。</p>
+<p>将在逻辑层编写的更新和查询转变成物理层的高效操作序列，这是数据库系统的任务；</p>
+<h2 id="1-7-1-存储管理器"><a href="#1-7-1-存储管理器" class="headerlink" title="1.7.1 存储管理器"></a>1.7.1 存储管理器</h2><p><strong>存储管理器</strong> 是 数据库系统中负责在【数据库中存储的底层数据】与【应用程序】以及【向系统提交的查询】之间提供接口的部件；它负责与文件管理器进行交互；</p>
+<p>​    存储管理器将各种 <code>DML</code> 语句翻译为底层文件系统命令。而原始数据通过操作系统提供的文件系统存储在硬盘上。</p>
+<p>因此存储管理器负责数据库中数据的存储、检索和更新；</p>
+<p>存储管理部件包括：</p>
+<ul>
+<li><strong>权限及完整性管理器</strong>(authorization and integrity manager)：检测是否满足完整性约束，并检查试图访问数据的用户的权限；</li>
+<li><strong>事务管理器</strong>( transaction manager )：保证数据库及事故障时也保持在一致的状态，保证并发事务的执行不发生冲突；</li>
+<li><strong>文件管理器</strong>( file manager )：它管理磁盘存储空间的分配，管理用于表示磁盘上存储信息的数据结构；</li>
+<li><strong>缓存处理器</strong>( buffer manager )：负责将数据从磁盘上取到内存中，决定哪些数据应被缓存。</li>
+</ul>
+<p>存储管理器实现了几种数据结构，作为系统物理实现的一部分：</p>
+<ul>
+<li><strong>数据文件</strong> 存储数据库自身</li>
+<li><strong>数据字典</strong> ：存储关于数据库结构的元数据，尤其是数据库模式；</li>
+<li><strong>索引</strong>：提供对数据项的快速访问。</li>
+</ul>
+<h2 id="1-7-2-查询处理器"><a href="#1-7-2-查询处理器" class="headerlink" title="1.7.2 查询处理器"></a>1.7.2 查询处理器</h2><p>查询处理器组件包括：</p>
+<ul>
+<li><strong>DDL解释器（DDL interpreter）</strong>：他解释DDL语句并将这些定义记录在数据字典中。</li>
+<li><strong>DML编译器（DML compiler）</strong>：将查询语言中的DML语句翻译为一个执行方案，包括一系列查询执行引擎能理解的低级指令。<ul>
+<li>一个查询通常可翻译为多种等价的具有相同结果的执行方案的一种。DML编译器还进行<strong>查询优化</strong>，也就是从几种选择中选出代价最小的一种。</li>
+</ul>
+</li>
+<li><strong>查询执行引擎（query evaluation engine）</strong>：执行由DML编译器产生的低级指令；</li>
+</ul>
+<h1 id="1-8-事务管理"><a href="#1-8-事务管理" class="headerlink" title="1.8 事务管理"></a>1.8 事务管理</h1><p>对数据库的几个操作合起来形成一个逻辑单元；</p>
+<ul>
+<li><strong>原子性（atomicity）</strong>：要求这些操作要么全部完成要么不发生的；</li>
+<li><strong>一致性（consistency）</strong>：要求结果这种正确性；例如转账后两账户余额之和不变；</li>
+<li><strong>持久性（durability）</strong>：要求即使发生系统故障，事务完成后的结果依然保持不变；</li>
+</ul>
+<p><strong>事务</strong> 是数据库应用中完成单一逻辑功能的操作集合；</p>
+<blockquote>
+<p>每个事务是既具有原子性又具有一致性的单元；因此要求事务不违反任何的数据库一致性约束；</p>
+<ul>
+<li>如果事务启动时数据库是一致的，那么事务完成结束时也应该时一致的。</li>
+<li>而事务执行过程中，必要时允许暂时的不一致；（转账总有转出与转入总得有个顺序）</li>
+<li>虽然暂时的不一致时必需的，但故障发生时，很可能导致问题产生；</li>
+</ul>
+</blockquote>
+<p><strong>事务管理器</strong> 包括 <strong>并发控制管理器</strong> 和 <strong>恢复管理器</strong>；</p>
+<p>原子性和持久性的保证是 <strong>恢复管理器</strong> 的职责；使得系统故障时保证数据的原子性和持久性；</p>
+<p><strong>并发控制管理器</strong> 控制并发事务间的相互影响， 保证数据库一致性；</p>
+<h1 id="1-9-数据库体系结构"><a href="#1-9-数据库体系结构" class="headerlink" title="1.9 数据库体系结构"></a>1.9 数据库体系结构</h1><p><img src="/.com//image-20201118102051536.png" alt="image-20201118102051536"></p>
+<p>数据库系统可以是集中式的、客户/服务器式的（一台服务器为多个客户机执行任务）；也可以针对<strong>并行计算机体系结构</strong>设计数据库系统；<strong>分布式数据库</strong>包含地理上分离的多台计算机；</p>
+<p>在一个 <strong>两层体系结构</strong> 中，应用程序驻留在客户机上，通过查询语言表达式来调用服务器上的数据库系统功能；</p>
+<p>在一个 <strong>三层体系结构</strong> 中，客户机只作为一个前端并且不包含任何直接的数据库调用。客户端通常通过一个表单界面与应用服务器进行通信。应用服务器与数据库系统通信以访问数据。</p>
+<p><img src="/.com//image-20201118103122320.png" alt="image-20201118103122320"></p>
+<h1 id="1-10-数据挖掘与信息检索"><a href="#1-10-数据挖掘与信息检索" class="headerlink" title="1.10 数据挖掘与信息检索"></a>1.10 数据挖掘与信息检索</h1><p><strong>数据挖掘（data mining）</strong>指半自动地分析大型数据库并从中找出有用的模式的过程；从数据库中找到的发现的某些类型地只是可以用一套 <strong>规则</strong> 表示。</p>
+<h1 id="1-11-特种数据库"><a href="#1-11-特种数据库" class="headerlink" title="1.11 特种数据库"></a>1.11 特种数据库</h1><p>数据库系统的一些应用领域收到关系数据库的限制。<strong>基于对象的数据模型</strong>和<strong>半结构化数据模型</strong>；</p>
+<h1 id="1-12-数据库用户和管理员"><a href="#1-12-数据库用户和管理员" class="headerlink" title="1.12 数据库用户和管理员"></a>1.12 数据库用户和管理员</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/09/database-system-conception-2/" rel="next" title="第二章 关系模型介绍">
+                <i class="fa fa-chevron-left"></i> 第二章 关系模型介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/01/zuoshen-basic-class-3/" rel="prev" title="左神算法-基础课-03">
+                左神算法-基础课-03 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">Deep ploughing those days ​​​​</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/1956918893" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:juyi006@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://fivelike.xyz/" title="fivelike" target="_blank">fivelike</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.reachdong.cool/" title="ReachDong(dada)" target="_blank">ReachDong(dada)</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-2-数据库系统的目标"><span class="nav-text">1.2 数据库系统的目标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-3-数据视图"><span class="nav-text">1.3 数据视图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-1-数据抽象"><span class="nav-text">1.3.1 数据抽象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-2-实例和模式"><span class="nav-text">1.3.2 实例和模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-3-数据模型"><span class="nav-text">1.3.3 数据模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-4-数据库语言"><span class="nav-text">1.4 数据库语言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-1-数据操纵语言"><span class="nav-text">1.4.1 数据操纵语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-2-数据定义语言"><span class="nav-text">1.4.2 数据定义语言</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-5-关系数据库"><span class="nav-text">1.5 关系数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-1-表"><span class="nav-text">1.5.1 表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-2-数据操纵语言"><span class="nav-text">1.5.2 数据操纵语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-3-数据定义语言"><span class="nav-text">1.5.3 数据定义语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-4-来自应用程序的数据库访问"><span class="nav-text">1.5.4 来自应用程序的数据库访问</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-6-数据库设计"><span class="nav-text">1.6 数据库设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-1-设计过程"><span class="nav-text">1.6.1 设计过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-2-大学机构的数据库设计"><span class="nav-text">1.6.2 大学机构的数据库设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-3-实体-联系模型"><span class="nav-text">1.6.3 实体-联系模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-4-规范化"><span class="nav-text">1.6.4 规范化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-7-数据存储和查询"><span class="nav-text">1.7 数据存储和查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-7-1-存储管理器"><span class="nav-text">1.7.1 存储管理器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-7-2-查询处理器"><span class="nav-text">1.7.2 查询处理器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-8-事务管理"><span class="nav-text">1.8 事务管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-9-数据库体系结构"><span class="nav-text">1.9 数据库体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-10-数据挖掘与信息检索"><span class="nav-text">1.10 数据挖掘与信息检索</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-11-特种数据库"><span class="nav-text">1.11 特种数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-12-数据库用户和管理员"><span class="nav-text">1.12 数据库用户和管理员</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
