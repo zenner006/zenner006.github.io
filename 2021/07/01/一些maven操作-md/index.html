@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="IDEA,maven,tips," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一些关于maven的小技巧 如果发现包不在了可以更新一下maven的源   如果控制台输出中文乱码了，可以在idea的setting-maven-running-VM options里写下参数-Dfile. encoding&#x3D;gb2312：发现原本的日志输出乱码了。。。所以把字符集改成GBK后，OK了。  IDEA的Maven Projects无法显示idea自带了maven控件，不像Eclips">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些maven操作">
+<meta property="og:url" content="http://yoursite.com/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/index.html">
+<meta property="og:site_name" content="zenner&#39;s Blog">
+<meta property="og:description" content="一些关于maven的小技巧 如果发现包不在了可以更新一下maven的源   如果控制台输出中文乱码了，可以在idea的setting-maven-running-VM options里写下参数-Dfile. encoding&#x3D;gb2312：发现原本的日志输出乱码了。。。所以把字符集改成GBK后，OK了。  IDEA的Maven Projects无法显示idea自带了maven控件，不像Eclips">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="http://yoursite.com/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/1172444-20170724172834465-2099154620.png">
+<meta property="og:image" content="http://yoursite.com/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/1039653-20181202164439790-178566506.png">
+<meta property="og:image" content="http://yoursite.com/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/1039653-20181202165035638-1650425818.png">
+<meta property="og:image" content="http://yoursite.com/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/1039653-20181202165315306-316822270.png">
+<meta property="article:published_time" content="2021-07-01T03:50:47.000Z">
+<meta property="article:modified_time" content="2021-07-01T04:07:41.481Z">
+<meta property="article:tag" content="IDEA">
+<meta property="article:tag" content="maven">
+<meta property="article:tag" content="tips">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/1172444-20170724172834465-2099154620.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/07/01/一些maven操作-md/"/>
+
+
+
+
+
+  <title>一些maven操作 | zenner's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zenner's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">巨饼的技术博</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zenner's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一些maven操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-07-01T11:50:47+08:00">
+                2021-07-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tips/" itemprop="url" rel="index">
+                    <span itemprop="name">tips</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一些关于maven的小技巧"><a href="#一些关于maven的小技巧" class="headerlink" title="一些关于maven的小技巧"></a>一些关于maven的小技巧</h2><ul>
+<li>如果发现包不在了可以更新一下maven的源</li>
+</ul>
+<ul>
+<li>如果控制台输出中文乱码了，可以在idea的<code>setting</code>-<code>maven</code>-<code>running</code>-<code>VM options</code>里写下参数<code>-Dfile. encoding=gb2312</code>：发现原本的日志输出乱码了。。。所以把字符集改成<code>GBK</code>后，OK了。</li>
+</ul>
+<h2 id="IDEA的Maven-Projects无法显示"><a href="#IDEA的Maven-Projects无法显示" class="headerlink" title="IDEA的Maven Projects无法显示"></a><a href="https://www.cnblogs.com/new-life/p/10753575.html" target="_blank" rel="noopener">IDEA的Maven Projects无法显示</a></h2><p>idea自带了maven控件，不像Eclipse还需要下载控件，如果你以前有maven在右边，出于某种原因，消失找不到 了，可以试试以下方法.</p>
+<p><strong>方法1.</strong>你点击一下你idea界面最左下角的那个小框，maven应该从里面找到</p>
+<p><strong>方法2.</strong>点击菜单栏View-&gt;Tool Windows-&gt;Maven projects </p>
+<p><strong>方法3.</strong>点击菜单栏Help-&gt;Find Action(Ctrl+Shift+A),输入Maven projects</p>
+<p><strong>方法4.在Settings—&gt;Plugins搜索Maven Integration，打勾（原本没打勾的就勾上保存，有打勾就去掉勾保存后再勾上）重启IDEA即可.</strong></p>
+<a id="more"></a>
+<p>前三个方法都试了还是不行，发现maven控件直接没有了，用上方法4，问题解决</p>
+<p><img src="/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/1172444-20170724172834465-2099154620.png" alt="img"></p>
+<h2 id="Ideal-导入Maven项目"><a href="#Ideal-导入Maven项目" class="headerlink" title="Ideal 导入Maven项目"></a>Ideal 导入Maven项目</h2><p>选择打开Maven项目</p>
+<h5 id="然后先点开-File-gt-Other-Settings-gt-Structure-for-New-Projects…-设置全局-JDK"><a href="#然后先点开-File-gt-Other-Settings-gt-Structure-for-New-Projects…-设置全局-JDK" class="headerlink" title="然后先点开 File -&gt; Other Settings -&gt; Structure for New Projects… 设置全局 JDK"></a>然后先点开 File -&gt; Other Settings -&gt; Structure for New Projects… 设置全局 JDK</h5><p><img src="/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/1039653-20181202164439790-178566506.png" alt="img"></p>
+<p><img src="/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/1039653-20181202165035638-1650425818.png" alt="img"></p>
+<h5 id="之后点击-Project-应用刚才添加的-JDK"><a href="#之后点击-Project-应用刚才添加的-JDK" class="headerlink" title="之后点击 Project 应用刚才添加的 JDK"></a>之后点击 Project 应用刚才添加的 JDK</h5><p><img src="/2021/07/01/%E4%B8%80%E4%BA%9Bmaven%E6%93%8D%E4%BD%9C-md/1039653-20181202165315306-316822270.png" alt="img"></p>
+<h5 id="设置-Maven-点击-Other-Settings-gt-Settings-for-new-Projects…"><a href="#设置-Maven-点击-Other-Settings-gt-Settings-for-new-Projects…" class="headerlink" title="设置 Maven 点击 Other Settings -&gt; Settings for new Projects…"></a>设置 Maven 点击 Other Settings -&gt; Settings for new Projects…</h5><p>由于我的项目里配置了Tomcat所以直接在IDEA的Maven Projects里找<code>tomcat7</code>里的<code>tomcat7:run</code>;</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/IDEA/" rel="tag"># IDEA</a>
+          
+            <a href="/tags/maven/" rel="tag"># maven</a>
+          
+            <a href="/tags/tips/" rel="tag"># tips</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/13/Maven-basic-md/" rel="next" title="Maven基础">
+                <i class="fa fa-chevron-left"></i> Maven基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">Deep ploughing those days ​​​​</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/1956918893" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:juyi006@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://fivelike.xyz/" title="fivelike" target="_blank">fivelike</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.reachdong.cool/" title="ReachDong(dada)" target="_blank">ReachDong(dada)</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些关于maven的小技巧"><span class="nav-text">一些关于maven的小技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IDEA的Maven-Projects无法显示"><span class="nav-text">IDEA的Maven Projects无法显示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ideal-导入Maven项目"><span class="nav-text">Ideal 导入Maven项目</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#然后先点开-File-gt-Other-Settings-gt-Structure-for-New-Projects…-设置全局-JDK"><span class="nav-text">然后先点开 File -&gt; Other Settings -&gt; Structure for New Projects… 设置全局 JDK</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#之后点击-Project-应用刚才添加的-JDK"><span class="nav-text">之后点击 Project 应用刚才添加的 JDK</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设置-Maven-点击-Other-Settings-gt-Settings-for-new-Projects…"><span class="nav-text">设置 Maven 点击 Other Settings -&gt; Settings for new Projects…</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

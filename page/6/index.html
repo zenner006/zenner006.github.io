@@ -271,6 +271,150 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/18/surprise-bug/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zenner's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/07/18/surprise-bug/" itemprop="url">matlab竟有这种特性！</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-18T16:20:35+08:00">
+                2020-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/matlab/" itemprop="url" rel="index">
+                    <span itemprop="name">matlab</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>matlab竟然可以对一个从未声明过的变量的索引进行赋值。很明显是一种很自由，开放的数据操作模式。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; A(<span class="number">1</span>,<span class="number">2</span>) = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">A =</span><br><span class="line">	<span class="number">0</span>	<span class="number">1</span></span><br><span class="line">	</span><br><span class="line">&gt;&gt; A(<span class="number">2</span>,<span class="number">5</span>) = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">A = </span><br><span class="line"></span><br><span class="line">     <span class="number">0</span>     <span class="number">1</span>     <span class="number">0</span>     <span class="number">0</span>     <span class="number">0</span></span><br><span class="line">     <span class="number">0</span>     <span class="number">0</span>     <span class="number">0</span>     <span class="number">0</span>     <span class="number">1</span></span><br><span class="line"></span><br><span class="line">&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>我写的一个算AUC的代码中，有一个变量未注意大小写。对其进行的赋值导致未起作用。这个bug一直存在。而程序也未提醒。他就当作了一个新变量的赋值。而我认为它对我的数据进行了处理。哎，心累。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/18/mysql-multiTable-transaction/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1779,211 +1923,6 @@ where....
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/11/java%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="zenner's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/11/java%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url">java高级编程上</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-11T20:22:50+08:00">
-                2020-05-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>[TOC]</p>
-<h1 id="eclipse"><a href="#eclipse" class="headerlink" title="eclipse"></a>eclipse</h1><p>启动后会选择工作目录</p>
-<p>如果把一些视图关闭了可以从 windows+show View:</p>
-<p><img src="/2020/05/11/java%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20200620094308218.png" alt="image-20200620094308218">t</p>
-<p>里打开 “project Explorer”,”outline”,”console”,”problems”;</p>
-<ul>
-<li>建立项目：命名为Myproject</li>
-</ul>
-<p>项目创建完成后会产生两个目录：</p>
-<ul>
-<li><p>src : 保存所有的原代码目录</p>
-</li>
-<li><p>bin : 保存所有的生成的 *.class 目录；</p>
-</li>
-</ul>
-<p>这个视图会和原来不一样，可以在右上角切换；</p>
-<ul>
-<li>字体大小通过Ctrl + ++放大字体，通过 windows+preference也可以调整</li>
-</ul>
-<blockquote>
-<p>范例：编写程序</p>
-</blockquote>
-<ul>
-<li>输入main,然后ALt+”/“可补充完成</li>
-<li>系统输出：sysout，ALT+/</li>
-</ul>
-<p>代码生成功能可以生成一些类方法：</p>
-<blockquote>
-<p>范例生成类方法：</p>
-</blockquote>
-<ul>
-<li>光标放在这里：</li>
-</ul>
-<p><img src="/2020/05/11/java%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20200620100005420.png" alt="image-20200620100005420"></p>
-<ul>
-<li>状态栏【source】</li>
-</ul>
-<p><img src="/2020/05/11/java%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20200620100058934.png" alt="image-20200620100058934"></p>
-<ul>
-<li>里面可选 生成 setter，getter；有参构造，无参构造；</li>
-</ul>
-<blockquote>
-<p>快捷键：</p>
-</blockquote>
-<ul>
-<li>Alt+/:代码编写提示</li>
-<li>Ctr + 1：代码纠正；</li>
-<li>CTRL + SHIFT + O :开发包的自动导入</li>
-<li>CTRL  + / ：注释代码</li>
-<li>CTRL + SHIFT + / ：注释多行</li>
-<li>CTRL + SHIFT + F ：格式化代码</li>
-<li>CTRL + SHIFT + L : 快捷键列表；</li>
-<li>文档注释：<code>/**</code>+回车</li>
-</ul>
-<p>项目导入导出：</p>
-<ul>
-<li>导出：【file】+【export】;</li>
-<li>导入：【项目】右键+【properties】+【java build path】+【library】+【classpath】+【Add External JARs】</li>
-</ul>
-<p>带参数的项目运行</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/05/11/java%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2038,7 +1977,7 @@ where....
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-count">62</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2049,7 +1988,7 @@ where....
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2060,7 +1999,7 @@ where....
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
